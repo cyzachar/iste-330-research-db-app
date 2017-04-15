@@ -10,7 +10,7 @@ public class ResearchDb{
    private String uri = "jdbc:mysql://localhost/facresearchdb?autoReconnect=true&useSSL=false";
    private String driver = "com.mysql.jdbc.Driver";
    private String user = "root";
-   private String password = "mA49k-Lj";    //"student";
+   private String password = "student";
    private Connection conn = null;
    private static final ResearchDb INSTANCE = new ResearchDb();
    
