@@ -33,15 +33,15 @@ public class ResearchDb{
             conn = DriverManager.getConnection(uri, user, password);
          }
          catch(ClassNotFoundException cnfe){
-            throw new DLException(cnfe, getCurTime(), "MySQLDatabase:connect",
+            throw new DLException(cnfe, getCurTime(), "ResearchDb:connect",
                                     "MySQL driver not found.");
          }
          catch(SQLException sqle){
-            throw new DLException(sqle, getCurTime(), "MySQLDatabase:connect",
+            throw new DLException(sqle, getCurTime(), "ResearchDb:connect",
                                     "User: " + user);
          }
          catch(Exception e){
-            throw new DLException(e, getCurTime(), "MySQLDatabase:connect");
+            throw new DLException(e, getCurTime(), "ResearchDb:connect");
          }
       }
    }  //end connect
@@ -58,10 +58,10 @@ public class ResearchDb{
          }
       }
       catch(SQLException sqle){
-         throw new DLException(sqle, getCurTime(), "MySQLDatabase:close");
+         throw new DLException(sqle, getCurTime(), "ResearchDb:close");
       }
       catch(Exception e){
-         throw new DLException(e, getCurTime(), "MySQLDatabase:close");
+         throw new DLException(e, getCurTime(), "ResearchDb:close");
       }
    }
    
@@ -106,11 +106,11 @@ public class ResearchDb{
          }
       }
       catch(SQLException sqle){
-         throw new DLException(sqle, getCurTime(), "MySQLDatabase:getData(String,ArrayList)", 
+         throw new DLException(sqle, getCurTime(), "ResearchDb:getData(String,ArrayList)", 
                                  "Prepared string: " + prepStr, "Values: " + values);
       }
       catch(Exception e){
-         throw new DLException(e, getCurTime(), "MySQLDatabase:getData(String,ArrayList)",
+         throw new DLException(e, getCurTime(), "ResearchDb:getData(String,ArrayList)",
                                  "Prepared string: " + prepStr, "Values: " + values);
       }
       finally{
@@ -152,11 +152,11 @@ public class ResearchDb{
          }
       }
       catch(SQLException sqle){
-         throw new DLException(sqle, getCurTime(), "MySQLDatabase:prepare", 
+         throw new DLException(sqle, getCurTime(), "ResearchDb:prepare", 
                                  "Prepared string: " + prepStr, "Values: " + values);
       }
       catch(Exception e){
-         throw new DLException(e, getCurTime(), "MySQLDatabase:prepare", 
+         throw new DLException(e, getCurTime(), "ResearchDb:prepare", 
                                  "Prepared string: " + prepStr, "Values: " + values);
       }
       return stmt;
@@ -175,14 +175,63 @@ public class ResearchDb{
          rowsAffected = stmt.executeUpdate();
       }
       catch(SQLException sqle){
-         throw new DLException(sqle, getCurTime(), "MySQLDatabase:executeStmt)", 
+         throw new DLException(sqle, getCurTime(), "ResearchDb:executeStmt)", 
                                  "Prepared string: " + prepStr, "Values: " + values);
       }
       catch(Exception e){
-         throw new DLException(e, getCurTime(), "MySQLDatabase:executeStmt",
+         throw new DLException(e, getCurTime(), "ResearchDb:executeStmt",
                                  "Prepared string: " + prepStr, "Values: " + values);
       }
       return rowsAffected;
+   }
+   
+   /**
+    * Begins a transaction
+    */
+   public void startTrans() throws DLException{
+      try{
+         connect();
+         conn.setAutoCommit(false);
+      }
+      catch(SQLException sqle){
+         throw new DLException(sqle, getCurTime(), "ResearchDb:startTrans");
+      }
+   }
+  
+   /**
+    * Ends a transaction
+    */
+   public void endTrans() throws DLException{
+      try{
+         conn.setAutoCommit(true);
+      }
+      catch(SQLException sqle){
+         throw new DLException(sqle, getCurTime(), "ResearchDb:endTrans");
+      }
+   }
+   
+   /**
+    * Returns the database to the state it was in before transaction statements were attempted
+    */
+   public void rollbackTrans() throws DLException{
+      try{
+         conn.rollback();
+      }
+      catch(SQLException sqle){
+         throw new DLException(sqle, getCurTime(), "ResearchDb:rollbackTrans");
+      }
+   }
+   
+   /**
+    * Commits changes made at the end of a transaction
+    */
+   public void commitTrans() throws DLException{
+      try{
+         conn.commit();
+      }
+      catch(SQLException sqle){
+         throw new DLException(sqle, getCurTime(), "ResearchDb:commitTrans");
+      }
    }
    
    /**
