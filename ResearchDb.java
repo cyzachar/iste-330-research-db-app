@@ -4,7 +4,6 @@ import java.util.*;  //for Date and ArrayList
 /**
  * Provides methods to open and close a connection to and access and alter the data 
  * within the facresearchdb database.
- * @version 4-15-17
  */
 public class ResearchDb{
    private String uri = "jdbc:mysql://localhost/facresearchdb?autoReconnect=true&useSSL=false";
@@ -52,7 +51,7 @@ public class ResearchDb{
     */
    public void close() throws DLException{
       try{
-         if(conn != null && !conn.getAutoCommit()){
+         if(conn != null && conn.getAutoCommit()){
             conn.close();
             conn = null;
          }
@@ -127,9 +126,54 @@ public class ResearchDb{
     */
    public boolean setData(String sqlStr, ArrayList<String> values) throws DLException{
       connect();
-      int rowCount = executeStmt(sqlStr, values);
-      close();
+      int rowCount = 0;
+      PreparedStatement stmt = prepare(sqlStr, values);
+      try{
+         rowCount = stmt.executeUpdate();
+      }
+      catch(SQLException sqle){
+         throw new DLException(sqle, getCurTime(), "ResearchDb:setData)", 
+                                 "Prepared string: " + sqlStr, "Values: " + values);
+      }
+      catch(Exception e){
+         throw new DLException(e, getCurTime(), "ResearchDb:setData",
+                                 "Prepared string: " + sqlStr, "Values: " + values);
+      }
+      finally{
+         close();
+      }
       return rowCount > 0;
+   }
+   
+   /**
+    * Inserts data into the database using a prepared statement
+    * @param prepStr  the SQL (using placeholders) to be prepared
+    * @param values   an ArrayList of values to bind to the prepared statement
+    * @return the generated id of the last inserted record
+    */
+   public int insertData(String sqlStr, ArrayList<String> values) throws DLException{
+      connect();
+      int lastId = -1;
+      PreparedStatement stmt = prepare(sqlStr, values);
+      try{
+         stmt.executeUpdate();
+         ResultSet result = stmt.getGeneratedKeys();
+         if(result.next()){
+            lastId = result.getInt(1);
+         }
+      }
+      catch(SQLException sqle){
+         throw new DLException(sqle, getCurTime(), "ResearchDb:insertData)", 
+                                 "Prepared string: " + sqlStr, "Values: " + values);
+      }
+      catch(Exception e){
+         throw new DLException(e, getCurTime(), "ResearchDb:insertData",
+                                 "Prepared string: " + sqlStr, "Values: " + values);
+      }
+      finally{
+         close();
+      }
+      return lastId;
    }
    
    /**
@@ -143,7 +187,7 @@ public class ResearchDb{
       
       try{
          //prepare statement
-         stmt = conn.prepareStatement(prepStr);
+         stmt = conn.prepareStatement(prepStr, Statement.RETURN_GENERATED_KEYS);
          
          //bind values
          int numVals = values.size();
@@ -161,29 +205,6 @@ public class ResearchDb{
       }
       return stmt;
    }  //end prepare
-   
-   /*
-    * Executes a prepared statement for an update
-    * @param prepStr  the SQL (using placeholders) to be prepared
-    * @param values   an ArrayList of values to bind to the prepared statement
-    * @return the number of rows affected by the update
-    */
-   public int executeStmt(String prepStr, ArrayList<String> values) throws DLException{
-      int rowsAffected = 0;
-      PreparedStatement stmt = prepare(prepStr, values);
-      try{
-         rowsAffected = stmt.executeUpdate();
-      }
-      catch(SQLException sqle){
-         throw new DLException(sqle, getCurTime(), "ResearchDb:executeStmt)", 
-                                 "Prepared string: " + prepStr, "Values: " + values);
-      }
-      catch(Exception e){
-         throw new DLException(e, getCurTime(), "ResearchDb:executeStmt",
-                                 "Prepared string: " + prepStr, "Values: " + values);
-      }
-      return rowsAffected;
-   }
    
    /**
     * Begins a transaction
