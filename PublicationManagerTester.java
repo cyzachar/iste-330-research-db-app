@@ -2,6 +2,7 @@ import java.util.*;
 
 /**
  * Class to test methods of the PublicationManager class
+ * @author Team 17
  */
 public class PublicationManagerTester{
 
@@ -29,7 +30,7 @@ public class PublicationManagerTester{
       printOperationStatus(manager.updatePublication(paper));
       
       System.out.println("-------Testing remove publication---------");
-      printOperationStatus(manager.removePublication(16));
+      printOperationStatus(manager.removePublication(20));
       
    }
    
@@ -56,7 +57,7 @@ public class PublicationManagerTester{
          System.out.println("Operation successful -- check db to make sure everything is correct\n");
       }
       else{
-         System.out.println("Operation unsuccessful -- check db to make sure nothing was changed\n");
+         System.out.println("Operation unsuccessful -- check db to make sure nothing was changed\nMake sure parameters for methods make sense\n");
       }
    }
 

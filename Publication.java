@@ -2,6 +2,7 @@ import java.util.*;  //for ArrayList
 
 /**
  * Represents a publication record with an id, title, abstract, citation, keywords, and authors
+ * @author Team 17
  */
 public class Publication{
    private int id;
@@ -13,6 +14,11 @@ public class Publication{
    
    /**
     * Initializes all attributes except id
+    * @param title      the title of the publication
+    * @param _abstract  the abstract of the publication
+    * @param citation   the citation of the publication
+    * @param keywords   the keywords of the publication
+    * @param authors    the authors of the publication
     */
    public Publication(String _title, String _abstract, String _citation, ArrayList<String> _keywords, ArrayList<String> _authors){
       title = _title;
@@ -24,6 +30,12 @@ public class Publication{
    
    /**
     * Initializes all attributes
+    * @param id         the id of the publication
+    * @param title      the title of the publication
+    * @param _abstract  the abstract of the publication
+    * @param citation   the citation of the publication
+    * @param keywords   the keywords of the publication
+    * @param authors    the authors of the publication
     */
    public Publication(int _id, String _title, String _abstract, String _citation, ArrayList<String> _keywords, ArrayList<String> _authors){
       id = _id;
@@ -132,7 +144,7 @@ public class Publication{
    
    /**
     * Returns a string describing publication details
-    * For testing purposes only
+    * FOR TESTING PURPOSES ONLY
     * @return a string describing publication id, title, keywords, & authors
     */
    public String toString(){

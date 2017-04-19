@@ -4,6 +4,7 @@ import java.util.*;  //for Date and ArrayList
 /**
  * Provides methods to open and close a connection to and access and alter the data 
  * within the facresearchdb database.
+ * @author Team 17
  */
 public class ResearchDb{
    private String uri = "jdbc:mysql://localhost/facresearchdb?autoReconnect=true&useSSL=false";

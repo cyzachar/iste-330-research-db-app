@@ -2,6 +2,7 @@ import java.util.*;  //for ArrayList
 
 /**
  * Provides methods to fetch, add, update, and delete publications
+ * @author Team 17
  */
 public class PublicationManager{
    private ResearchDb db;
