@@ -14,6 +14,12 @@ public class PublicationManager{
       db = ResearchDb.getInstance();
    }
    
+   public ArrayList<Publication> fetchPublicationsByTitle(String title){
+      String query = "SELECT papers.id, title, abstract, citation FROM papers "
+                        + "WHERE title LIKE CONCAT('%',?,'%');";
+      return fetchPublications(query, getParamArrayList(title));
+   }
+   
    /**
     * Returns publication objects for papers written by the given faculty member
     * @param name    the name of the faculty member to find papers for

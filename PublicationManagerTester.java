@@ -18,6 +18,9 @@ public class PublicationManagerTester{
       System.out.println("-------Testing fetch by keyword---------");
       displayPublications(manager.fetchPublicationsByKeyword("PERFORMANCE"));
       
+      System.out.println("-------Testing fetch by title-----------");
+      displayPublications(manager.fetchPublicationsByTitle("title"));
+      
       System.out.println("-------Testing add publication---------");
       Publication paper = new Publication("A title!","An abstract","A citation",getParamArrayList("Basket Weaving","Nonsense"),getParamArrayList("Steve Zilora","Dan Bogaard"));
       printOperationStatus(manager.addPublication(paper));
@@ -29,7 +32,7 @@ public class PublicationManagerTester{
       printOperationStatus(manager.updatePublication(paper));
       
       System.out.println("-------Testing remove publication---------");
-      printOperationStatus(manager.removePublication(20));
+      printOperationStatus(manager.removePublication(paper.getId()));
       
    }
    
