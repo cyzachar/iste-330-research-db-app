@@ -3,7 +3,7 @@ import java.util.ArrayList;
 /**
  * Provides methods to verify login credentials, retrieve faculty publications,
  * and validate user-entered data before making changes to the database (edit, add, remove)
- * @author Team 17
+ * @author Team 17: Fareed Abolhassani, Abdulaziz Alshkrah, Craig Price, Cynthia Zachar
  */
 public class FacultyManager {
 	private ResearchDb db;
@@ -81,14 +81,19 @@ public class FacultyManager {
     * @param citation   the new citation of the publication
     * @param keywords   the new keywords of the publication
     * @param authors    the new authors of the publication
-    * @return true if the update was successful; false otherwise
+    * @return a String describing the status of the operation
     */
-   public boolean editPublication(int id, String title, String _abstract, String citation, ArrayList<String> keywords, ArrayList<String> authors){
+   public String editPublication(int id, String title, String _abstract, String citation, ArrayList<String> keywords, ArrayList<String> authors){
       if(validateAuthors(authors)){
-         return pManager.updatePublication(new Publication(id, title, _abstract, citation, keywords, authors));
+         if(pManager.updatePublication(new Publication(id, title, _abstract, citation, keywords, authors))){
+            return "Publication was successfully updated!";
+         }
+         else{
+            return "Error: Update operation failed";
+         }
       }
       else{
-         return false;
+         return "Error: At least one listed author does not exist in the database.";
       }
    }
    

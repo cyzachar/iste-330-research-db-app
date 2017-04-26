@@ -2,7 +2,6 @@ import java.util.*;
 
 /**
  * Class to test methods of the PublicationManager class
- * @author Team 17
  */
 public class PublicationManagerTester{
 

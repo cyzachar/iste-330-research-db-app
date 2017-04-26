@@ -2,7 +2,7 @@ import java.util.*;  //for ArrayList
 
 /**
  * Provides methods to fetch, add, update, and delete publications
- * @author Team 17
+ * @author Team 17: Fareed Abolhassani, Abdulaziz Alshkrah, Craig Price, Cynthia Zachar
  */
 public class PublicationManager{
    private ResearchDb db;
@@ -101,12 +101,10 @@ public class PublicationManager{
          //update record in papers
          int id = paper.getId();
          success = db.setData(sql, getParamArrayList(paper.getTitle(), paper.getAbstract(), paper.getCitation(), ""+id));
-         
          //delete old paper_keywords and authorship records for id
          if(success && !deleteKeywords(id) && !deleteAuthors(id)){
             success = false;
          }
-         
          //add updated keyword and author records
          if(success && !insertKeywords(id, paper.getKeywords()) && !insertAuthors(id, paper.getAuthors())){
             success = false;

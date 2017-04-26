@@ -4,7 +4,7 @@ import java.util.*;  //for Date and ArrayList
 /**
  * Provides methods to open and close a connection to and access and alter the data 
  * within the facresearchdb database.
- * @author Team 17
+ * @author Team 17: Fareed Abolhassani, Abdulaziz Alshkrah, Craig Price, Cynthia Zachar
  */
 public class ResearchDb{
    private String uri = "jdbc:mysql://localhost/facresearchdb?autoReconnect=true&useSSL=false";
@@ -212,8 +212,9 @@ public class ResearchDb{
     */
    public void startTrans() throws DLException{
       try{
-         connect();
-         conn.setAutoCommit(false);
+         if(conn != null){
+            conn.setAutoCommit(false);
+         }
       }
       catch(SQLException sqle){
          throw new DLException(sqle, getCurTime(), "ResearchDb:startTrans");
@@ -225,7 +226,9 @@ public class ResearchDb{
     */
    public void endTrans() throws DLException{
       try{
-         conn.setAutoCommit(true);
+         if(conn != null){
+            conn.setAutoCommit(true);
+         }
       }
       catch(SQLException sqle){
          throw new DLException(sqle, getCurTime(), "ResearchDb:endTrans");
@@ -237,7 +240,9 @@ public class ResearchDb{
     */
    public void rollbackTrans() throws DLException{
       try{
-         conn.rollback();
+         if(conn != null){
+            conn.rollback();
+         }
       }
       catch(SQLException sqle){
          throw new DLException(sqle, getCurTime(), "ResearchDb:rollbackTrans");
@@ -249,7 +254,9 @@ public class ResearchDb{
     */
    public void commitTrans() throws DLException{
       try{
-         conn.commit();
+         if(conn != null){
+            conn.commit();
+         }
       }
       catch(SQLException sqle){
          throw new DLException(sqle, getCurTime(), "ResearchDb:commitTrans");
