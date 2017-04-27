@@ -14,6 +14,11 @@ public class PublicationManager{
       db = ResearchDb.getInstance();
    }
    
+   /**
+    * Returns publication objects for papers containing the given title string
+    * @param title    the title to search papers for
+    * @return an ArrayList of Publications that contain the given string in their title
+    */
    public ArrayList<Publication> fetchPublicationsByTitle(String title){
       String query = "SELECT papers.id, title, abstract, citation FROM papers "
                         + "WHERE title LIKE CONCAT('%',?,'%');";

@@ -62,14 +62,19 @@ public class FacultyManager {
     * @param citation   the citation of the new publication
     * @param keywords   the keywords of the new publication
     * @param authors    the authors of the new publication
-    * @return true if the insert was successful; false otherwise
+    * @return a String describing the status of the operation
     */
-   public boolean addPublication(String title, String _abstract, String citation, ArrayList<String> keywords, ArrayList<String> authors){
+   public String addPublication(String title, String _abstract, String citation, ArrayList<String> keywords, ArrayList<String> authors){
       if(validateAuthors(authors)){
-         return pManager.addPublication(new Publication(title, _abstract, citation, keywords, authors));
+         if(pManager.addPublication(new Publication(title, _abstract, citation, keywords, authors))){
+            return "Publication was successfully added!";
+         }
+         else{
+            return "Error: Addition of this publication failed.";
+         }
       }
       else{
-         return false;
+         return "Error: At least one listed author does not exist in the database.";
       }
    }
    
@@ -93,7 +98,7 @@ public class FacultyManager {
          }
       }
       else{
-         return "Error: At least one listed author does not exist in the database.";
+         return "Error: At least one listed author does not exist in the database. Be sure to provide both first and last name for all authors.";
       }
    }
    
@@ -113,14 +118,14 @@ public class FacultyManager {
     */
    private boolean validateAuthors(ArrayList<String> authors){
       boolean isValid = true;
-      String query = "SELECT id FROM faculty WHERE CONCAT(fName,' ',lName) = ? OR lName = ?;";
+      String query = "SELECT id FROM faculty WHERE CONCAT(fName,' ',lName) = ?;";
       
       try{
          db.startTrans();
          
          //check that each author is in the database
          for(String author : authors){
-            ArrayList<ArrayList<String>> result = db.getData(query, getParamArrayList(author, author), false);
+            ArrayList<ArrayList<String>> result = db.getData(query, getParamArrayList(author), false);
             if(result.size() < 1){
                isValid = false;
             }

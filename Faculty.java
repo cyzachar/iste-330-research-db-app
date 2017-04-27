@@ -1,6 +1,6 @@
 /**
  * Represents a faculty record with an id, first & last name, password, & email
- * @author Team 17
+ * @author Team 17: Fareed Abolhassani, Abdulaziz Alshkrah, Craig Price, Cynthia Zachar
  */
 public class Faculty {
 

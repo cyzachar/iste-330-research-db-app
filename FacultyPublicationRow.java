@@ -8,10 +8,11 @@ import java.awt.event.*;   //for MouseAdapter
  * @author Team 17: Fareed Abolhassani, Abdulaziz Alshkrah, Craig Price, Cynthia Zachar
  */
 public class FacultyPublicationRow extends JPanel{
-   private FacultyManager manager = new FacultyManager();
+   private FacultyManager fManager = new FacultyManager();
+   private FacultyView facView;
    private Publication paper;
    private String authors = "";
-   private final int TITLE_WIDTH = 100;
+   private final int TITLE_WIDTH = 300;
    private final int BUTTON_WIDTH = 50;
    private final int ROW_HEIGHT = 20;
    private final int FONT_SIZE = 14;
@@ -19,7 +20,7 @@ public class FacultyPublicationRow extends JPanel{
    //main is only for testing purposes
    public static void main(String[] args){
       JFrame jfMain = new JFrame();
-      jfMain.add(new FacultyPublicationRow(new Publication(21,"A title!","An abstract","A citation",getParamArrayList("Basket Weaving","Nonsense"),getParamArrayList("Steve Zilora","Dan Bogaard"))),BorderLayout.CENTER);
+      jfMain.add(new FacultyPublicationRow(new Publication(21,"A title!","An abstract","A citation",getParamArrayList("Basket Weaving","Nonsense"),getParamArrayList("Steve Zilora","Dan Bogaard")),new FacultyView((new FacultyManager()).checkLogin("5f47859188a602594556580532e814a3","sjz@it.rit.edu"))),BorderLayout.CENTER);
       jfMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       jfMain.setLocationRelativeTo(null);
       jfMain.pack();
@@ -30,8 +31,9 @@ public class FacultyPublicationRow extends JPanel{
     * Creates a row panel displaying a paper's authors along with an edit & delete button
     * @param _paper  the paper to display the title of
     */
-   public FacultyPublicationRow(Publication _paper){
+   public FacultyPublicationRow(Publication _paper, FacultyView _facView){
       paper = _paper;
+      facView = _facView;
       Font rowFont = new Font("rowFont", Font.PLAIN, FONT_SIZE);
       
       //paper title
@@ -39,6 +41,7 @@ public class FacultyPublicationRow extends JPanel{
       JLabel jlTitle = new JLabel(paper.getTitle());
       jlTitle.setPreferredSize(new Dimension(TITLE_WIDTH, ROW_HEIGHT));
       jlTitle.setFont(rowFont);
+      jlTitle.setToolTipText(title);
       add(jlTitle);
       
       //edit button
@@ -46,7 +49,7 @@ public class FacultyPublicationRow extends JPanel{
       jbEdit.addActionListener(new ActionListener(){
          //displays edit window
          public void actionPerformed(ActionEvent ae){
-            new EditWindow();
+            new AddEditWindow(true, facView, paper);
          }
       });
       add(jbEdit);
@@ -61,8 +64,9 @@ public class FacultyPublicationRow extends JPanel{
             //if user confirms deletion
             if(choice == JOptionPane.YES_OPTION){
                //deletion successful
-               if(manager.deletePublication(paper.getId())){
+               if(fManager.deletePublication(paper.getId())){
                   JOptionPane.showMessageDialog(null, "Deletion was successful", "Deletion Successful", JOptionPane.INFORMATION_MESSAGE);
+                  facView.reloadTable();
                }
                //deletion unsuccessful
                else{
@@ -84,162 +88,5 @@ public class FacultyPublicationRow extends JPanel{
       }
       return paramList;
    }
-   
-   /**
-    * A window that allows the user to edit publication details
-    */
-   class EditWindow{
-      private final int LABEL_WIDTH = 80;
-      private final int LABEL_HEIGHT = 20;
-      
-      /**
-       * Presents text fields for the user to edit a paper's current details 
-       */
-      public EditWindow(){
-         JFrame frame = new JFrame();
-         frame.setTitle("Edit Publication");
-
-         //title
-         frame.add(new JLabel(" Edit Publication:"), BorderLayout.NORTH);
-         
-         //all field labels on left of window
-         JPanel jpLabels = new JPanel(new BorderLayout());
-            //the labels for text fields
-            JPanel jpUpperLabels = new JPanel(new GridLayout(0,1));
-               jpUpperLabels.add(getFieldLabel(" Title: "));
-               jpUpperLabels.add(getFieldLabel(" Authors: "));
-               jpUpperLabels.add(getFieldLabel(" Keywords: "));
-            jpLabels.add(jpUpperLabels, BorderLayout.NORTH);
-            
-            //the labels for text areas
-            JPanel jpLowerLabels = new JPanel(new GridLayout(0,1));
-               jpLowerLabels.add(getFieldLabel(" Abstract: "));
-               jpLowerLabels.add(getFieldLabel(" Citation: "));
-            jpLabels.add(jpLowerLabels, BorderLayout.CENTER);
-         frame.add(jpLabels, BorderLayout.WEST);
-         
-         //all fields at the right of window
-         JPanel jpAllFields = new JPanel(new BorderLayout());
-            //all text fields
-            JPanel jpTextFields = new JPanel(new GridLayout(0,1));
-               //title
-               JTextField jtfTitle = new JTextField(paper.getTitle());
-               jpTextFields.add(jtfTitle);
-               
-               //authors
-               JTextField jtfAuthors = new JTextField(getCommaList(paper.getAuthors()));
-               jpTextFields.add(jtfAuthors);
-               
-               //keywords
-               JTextField jtfKeywords = new JTextField(getCommaList(paper.getKeywords()));
-               jpTextFields.add(jtfKeywords);
-            jpAllFields.add(jpTextFields, BorderLayout.NORTH);
-            
-            //all text areas
-            JPanel jpTextAreas = new JPanel(new GridLayout(0,1));
-               //abstract
-               JTextArea jtaAbstract = getFieldTextArea(paper.getAbstract());
-               jpTextAreas.add(new JScrollPane(jtaAbstract));
-               
-               //citation
-               JTextArea jtaCitation = getFieldTextArea(paper.getCitation());
-               jpTextAreas.add(new JScrollPane(jtaCitation));
-            jpAllFields.add(jpTextAreas, BorderLayout.CENTER);
-         frame.add(jpAllFields, BorderLayout.CENTER);
-         
-         //all buttons at bottom of window
-         JPanel jpControls = new JPanel();
-            //save button
-            JButton jbSave = new JButton("Save");
-               jbSave.addActionListener(new ActionListener(){
-                  public void actionPerformed(ActionEvent ae){
-                     //attempt update
-                     String status = manager.editPublication(paper.getId(), 
-                                                             jtfTitle.getText(), 
-                                                             jtaAbstract.getText(), 
-                                                             jtaCitation.getText(), 
-                                                             getArrayListFromCommaList(jtfKeywords.getText()), 
-                                                             getArrayListFromCommaList(jtfAuthors.getText()) );
-                     //if update unsuccessful
-                     if(status.substring(0,5).equals("Error")){
-                        JOptionPane.showMessageDialog(null, status, "Error", JOptionPane.ERROR_MESSAGE);
-                     }
-                     //if update successful
-                     else{
-                        JOptionPane.showMessageDialog(null, status, "Update Successful", JOptionPane.INFORMATION_MESSAGE);
-                        frame.dispose();
-                     }
-                  }
-               });
-            jpControls.add(jbSave);
-            
-            //cancel button
-            JButton jbCancel = new JButton("Cancel");
-               jbCancel.addActionListener(new ActionListener(){
-                  public void actionPerformed(ActionEvent ae){
-                     frame.dispose();
-                  }
-               });
-            jpControls.add(jbCancel);
-         frame.add(jpControls, BorderLayout.SOUTH);
-         
-         //handle position and display of frame
-         frame.pack();
-         frame.setLocationRelativeTo(null);
-         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-         frame.setVisible(true);
-      }  //end EditWindow constructor
-      
-      /**
-       * Creates a label of a certain size
-       * @param text    the text for the label
-       * @return a label of a certain size
-       */
-      private JLabel getFieldLabel(String text){
-         JLabel label = new JLabel(text);
-         label.setPreferredSize(new Dimension(LABEL_WIDTH,LABEL_HEIGHT));
-         return label;
-      }
-      
-      /**
-       * Creates a text area with wrapped text
-       * @param text    the text to show in the text area
-       * @return a text area with wrapped text
-       */
-      private JTextArea getFieldTextArea(String text){
-         JTextArea textArea = new JTextArea(text);
-         textArea.setLineWrap(true);
-         textArea.setWrapStyleWord(true);
-         return textArea;
-      }
-      
-      /**
-       * Creates a String of comma separated values from an ArrayList
-       * @param list    the ArrayList to turn into a string
-       * @return a string of comma separated values
-       */
-      private String getCommaList(ArrayList<String> list){
-         String str = "";
-         for(String item : list){
-            str += item + ",";
-         }
-         return str.substring(0,str.length()-1);
-      }
-      
-      /**
-       * Creates an ArrayList from a String of comma separated values
-       * @param commaList    a string of comma separated values
-       * @return an ArrayList of values
-       */
-      private ArrayList<String> getArrayListFromCommaList(String commaList){
-         String[] splitList = commaList.split(",");
-         ArrayList<String> items = new ArrayList<String>();
-         for(String item : splitList){
-            items.add(item.trim());
-         }
-         return items;
-      }
-   
-   }  //end EditWindow inner class
 
 }  //end FacultyPublicationRow class
