@@ -1,7 +1,8 @@
 import java.util.*;  //for ArrayList
 
 /**
- * Provides methods to fetch, add, update, and delete publications
+ * Provides methods to fetch, add, update, and delete publications that meet given criteria.
+ * Also includes methods to get a list of all faculty and keywords in the db
  * @author Team 17: Fareed Abolhassani, Abdulaziz Alshkrah, Craig Price, Cynthia Zachar
  */
 public class PublicationManager{
@@ -12,6 +13,57 @@ public class PublicationManager{
     */
    public PublicationManager(){
       db = ResearchDb.getInstance();
+   }
+   
+   /**
+    * Retrieves the names of all faculty from the db
+    * @return an ArrayList of faculty full names
+    */
+   public ArrayList<String> getAllFaculty(){
+      String query = "SELECT fName, lName FROM faculty";
+      ArrayList<String> faculty = new ArrayList<String>();
+      try{
+         ArrayList<ArrayList<String>> data = db.getData(query, new ArrayList<String>(), false);
+         for(ArrayList<String> row : data){
+            faculty.add(row.get(0) + " " + row.get(1));
+         }
+      }
+      catch(DLException dle){/*will return empty ArrayList*/}
+      return faculty;
+   }
+   
+   /**
+    * Retrieves all paper titles from the db
+    * @return an ArrayList of all paper titles
+    */
+   public ArrayList<String> getAllTitles(){
+      String query = "SELECT title FROM papers";
+      ArrayList<String> titles = new ArrayList<String>();
+      try{
+         ArrayList<ArrayList<String>> data = db.getData(query, new ArrayList<String>(), false);
+         for(ArrayList<String> row : data){
+            titles.add(row.get(0));
+         }
+      }
+      catch(DLException dle){/*will return empty ArrayList*/}
+      return titles;
+   }
+   
+   /**
+    * Retrieves all keywords from the db
+    * @return an ArrayList of all unique keywords
+    */
+   public ArrayList<String> getAllKeywords(){
+      String query = "SELECT DISTINCT keyword FROM paper_keywords";
+      ArrayList<String> keywords = new ArrayList<String>();
+      try{
+         ArrayList<ArrayList<String>> data = db.getData(query, new ArrayList<String>(), false);
+         for(ArrayList<String> row : data){
+            keywords.add(row.get(0));
+         }
+      }
+      catch(DLException dle){/*will return empty ArrayList*/}
+      return keywords;
    }
    
    /**
@@ -48,6 +100,16 @@ public class PublicationManager{
                         + "JOIN paper_keywords ON paper_keywords.id = papers.id "
                         + "WHERE keyword = ?;";
       return fetchPublications(query, getParamArrayList(keyword));
+   }
+   
+   /**
+    * Returns publication objects for all papers in the db
+    * @return an ArrayList of all Publications
+    */
+   public ArrayList<Publication> fetchAllPublications(){
+      String query = "SELECT papers.id, title, abstract, citation FROM papers "
+                        + "ORDER BY title";
+      return fetchPublications(query, new ArrayList<String>());
    }
    
    /**
@@ -95,7 +157,7 @@ public class PublicationManager{
       }
       
       return success;
-   }
+   }  //end addPublication
    
    /**
     * Updates a publication in the database
@@ -144,7 +206,7 @@ public class PublicationManager{
       }
       
       return success;
-   }
+   }  //end updatePublication
    
    /**
     * Removes a publication from the database
@@ -242,8 +304,6 @@ public class PublicationManager{
             //add new publication to list
             papers.add(new Publication(id, title, paperAbstract, citation, keywords, authors));
          }
-         
-         
       }
       catch(DLException dle){
          papers = null;

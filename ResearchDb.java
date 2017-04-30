@@ -271,4 +271,4 @@ public class ResearchDb{
       return (new java.util.Date()).toString();
    }
    
-}  //end ResearachDb class
+}  //end ResearchDb class

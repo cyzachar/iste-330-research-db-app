@@ -31,8 +31,8 @@ public class PublicationManagerTester{
       paper.setKeywords(getParamArrayList("Nonsense","The Meaning of Life"));
       printOperationStatus(manager.updatePublication(paper));
       
-      System.out.println("-------Testing remove publication---------");
-      printOperationStatus(manager.removePublication(paper.getId()));
+      //System.out.println("-------Testing remove publication---------");
+      //printOperationStatus(manager.removePublication(paper.getId()));
       
    }
    

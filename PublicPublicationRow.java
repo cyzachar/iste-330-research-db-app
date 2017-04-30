@@ -10,8 +10,8 @@ import java.awt.event.*;   //for MouseAdapter
 public class PublicPublicationRow extends JPanel{
    private Publication paper;
    private String authors = "";
-   private final int TITLE_WIDTH = 100;
-   private final int AUTHORS_WIDTH = 300;
+   private final int TITLE_WIDTH = 400;
+   private final int AUTHORS_WIDTH = 240;
    private final int LABEL_HEIGHT = 20;
    private final int FONT_SIZE = 14;
    
@@ -38,6 +38,8 @@ public class PublicPublicationRow extends JPanel{
       JLabel jlTitle = new JLabel(paper.getTitle());
       jlTitle.setPreferredSize(new Dimension(TITLE_WIDTH, LABEL_HEIGHT));
       jlTitle.setFont(rowFont);
+      jlTitle.setToolTipText(title);
+      addRowMouseListener(jlTitle);
       add(jlTitle);
       
       //divider
@@ -51,23 +53,8 @@ public class PublicPublicationRow extends JPanel{
       add(jlAuthors);
       
       //mouselistener for row
-      addMouseListener(new MouseAdapter(){
       
-         /*Displays publication details*/
-         public void mouseClicked(MouseEvent me){
-            new PublicationDetails();
-         }
-         
-         /*Switches cursor to a hand when it's over the row*/
-         public void mouseEntered(MouseEvent me){
-            setCursor(new Cursor(Cursor.HAND_CURSOR));
-         }
-         
-         /*Switches cursor back to default when it's not over the row*/
-         public void mouseExited(MouseEvent me){
-            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-         }
-      });
+      addRowMouseListener(this);
       
    }  //end PublicPublicationRow constructor 
   
@@ -90,6 +77,7 @@ public class PublicPublicationRow extends JPanel{
                Font titleFont = new Font("titleFont", Font.PLAIN, 30);
                jlTitle.setFont(titleFont);
             jpTopInfo.add(jlTitle);
+
             
             //authors
             JLabel jlAuthors = new JLabel(authors, SwingConstants.CENTER);
@@ -123,6 +111,10 @@ public class PublicPublicationRow extends JPanel{
      * @return a string of comma separated values
      */
    private String getCommaList(ArrayList<String> list){
+      if(list.size() == 0){
+         return "";
+      }
+      
       String str = "";
       for(String item : list){
          str += item + ",";
@@ -152,6 +144,31 @@ public class PublicPublicationRow extends JPanel{
       block.setEditable(false);
       block.setBackground(null);
       return block;
+   }
+   
+   /**
+    * Adds a mouse listener to a component, which displays publication details when
+    * mouse is clicked and sets the cursor to indicate that an area is clickable
+    * @param element    the component to add the MouseListener to
+    */
+   private void addRowMouseListener(Component element){
+      element.addMouseListener(new MouseAdapter(){
+      
+         /*Displays publication details*/
+         public void mouseClicked(MouseEvent me){
+            new PublicationDetails();
+         }
+         
+         /*Switches cursor to a hand when it's over the row*/
+         public void mouseEntered(MouseEvent me){
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
+         }
+         
+         /*Switches cursor back to default when it's not over the row*/
+         public void mouseExited(MouseEvent me){
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+         }
+      });
    }
 
 }  //end PublicPublicationRow class
