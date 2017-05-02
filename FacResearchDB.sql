@@ -72,14 +72,14 @@ LOCK TABLES `faculty` WRITE;
 /*!40000 ALTER TABLE `faculty` DISABLE KEYS */;
 INSERT INTO `faculty` (fName,lName,password,email) VALUES ('Steve','Zilora','5f47859188a602594556580532e814a3','sjz@it.rit.edu'),
 														  ('Dan','Bogaard','f4f6172eb26581952a70d7199bfd2ddb','dsb@it.rit.edu'),
-                                                          ('Vicki','Hanson','gfuty67iilukjhftyuikihj','vlh@it.rit.edu'),
-                                                          ('Jim','Leone','y6u7ikujghgdytuytikhjk','jal@it.rit.edu'),
-                                                          ('Brian','Tomaszewski','e657687ilihjhvt67i','bmt@it.rit.edu'),
-                                                          ('Elissa','Weeden','rd676u7ygft7687iuygc76ui','emw@it.rit.edu'),
-                                                          ('Edward','Holden','crf7uyf7568iugf76uiyuh','eph@it.rit.edu'),
-                                                          ('Qi','Yu','ft7yuighvtf8yiukh','qyu@it.rit.edu'),
-                                                          ('Jai','Kang','cftyughvctfuyikuj','jwk@it.rit.edu'),
-                                                          ('Ronald','Vullo','frt7uyiughgvtf8yiuoi','rpv@it.rit.edu');
+                                                          ('Vicki','Hanson','9de3c9bf7efa9dc868904da05864c924','vlh@it.rit.edu'),
+                                                          ('Jim','Leone','617b94886b46c84543331ea15fd47855','jal@it.rit.edu'),
+                                                          ('Brian','Tomaszewski','4479459e822346f1d9db6301092026ef','bmt@it.rit.edu'),
+                                                          ('Elissa','Weeden','8176dfcfdee1aef1aaa60b52c298b1a3','emw@it.rit.edu'),
+                                                          ('Edward','Holden','b2c4bdc9078b3e51ac0e7a7c10902112','eph@it.rit.edu'),
+                                                          ('Qi','Yu','522fd20bb7451a705a380b1c3baa42a1','qyu@it.rit.edu'),
+                                                          ('Jai','Kang','2e03179e508d300209ae776c8844af7d','jwk@it.rit.edu'),
+                                                          ('Ronald','Vullo','f6c3fcbd15baf94d6b6e70d2aab0588c','rpv@it.rit.edu');
 /*!40000 ALTER TABLE `faculty` ENABLE KEYS */;
 UNLOCK TABLES;
 
