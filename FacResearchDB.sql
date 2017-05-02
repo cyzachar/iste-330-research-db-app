@@ -151,6 +151,35 @@ INSERT INTO `papers` (title,abstract,citation) VALUES ('TED','A new database arc
                                                       ('Databases in the Cloud: A status report','Some abstract that I made up','Holden, E.P., J.W. Kang, Anderson, G.R., D.P. Bills, M. Databases in the Cloud: A status report. ACM SIGITE Conference 2011, October 20-22, 2011 West Point, NY.');
 /*!40000 ALTER TABLE `papers` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `speakingrequest`
+--
+
+DROP TABLE IF EXISTS `speakingrequest`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `speakingrequest` (
+  `speakingRequestID` int(11) NOT NULL AUTO_INCREMENT,
+  `personFirstname` varchar(50) NOT NULL,
+  `personLastname` varchar(50) NOT NULL,
+  `addresLine1` varchar(45) NOT NULL,
+  `addressLine2` varchar(50) NOT NULL,
+  `city` varchar(50) NOT NULL,
+  `request` varchar(200) NOT NULL,
+  PRIMARY KEY (`speakingRequestID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `speakingrequest`
+--
+
+LOCK TABLES `speakingrequest` WRITE;
+/*!40000 ALTER TABLE `speakingrequest` DISABLE KEYS */;
+/*!40000 ALTER TABLE `speakingrequest` ENABLE KEYS */;
+UNLOCK TABLES;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
