@@ -20,9 +20,11 @@ public class SearchWindow{
    private JFrame frame;
    private JPanel jpResults;
    private JPanel jpSearchFields;
+   private JPanel jpBottom;
    private JComboBox jcbOptions;
    private JTextField jtfSearchTerms;
    private PublicationManager pManager = new PublicationManager();
+   private int loginSuccess = 0;
    
    private final String[] SEARCH_OPTIONS = {"Title","Faculty","Keyword"};
    private final int TABLE_HEIGHT = 200;
@@ -39,112 +41,135 @@ public class SearchWindow{
    /**
     * Creates & displays the window that the user will interact with
     */
-   public SearchWindow(){
-      frame = new JFrame();
-      frame.setTitle("RIT Research Database");
-      
-      //login button, header, & search box
-      JPanel jpTop = new JPanel(new BorderLayout());
-         //panel for login button & header
-         JPanel jpLogin = new JPanel(new BorderLayout());
-            //login button
-            JButton jbLogin = new JButton("Faculty Login");
-            jbLogin.addActionListener(new ActionListener(){
-               public void actionPerformed(ActionEvent ae){
-                  frame.dispose();
-                  //TO DO: open login window
-               }
-            });
-            jpLogin.add(jbLogin, BorderLayout.EAST);
-            
-            //header
-            JLabel jlHeader = new JLabel("RIT Research Database", JLabel.CENTER);
-               jlHeader.setFont(new Font("headerFont", Font.PLAIN, 32));
-            jpLogin.add(jlHeader, BorderLayout.SOUTH);
-         jpTop.add(jpLogin, BorderLayout.NORTH);
+	public SearchWindow() {
+		frame = new JFrame();
+		frame.setTitle("RIT Research Database");
+
+		// login button, header, & search box
+		JPanel jpTop = new JPanel(new BorderLayout());
+		// panel for login button & header
+		JPanel jpLogin = new JPanel(new BorderLayout());
+		// login button
+		JButton jbLogin = new JButton("Faculty Login");
+		jpLogin.add(jbLogin, BorderLayout.EAST);
+		jbLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				// open login window
+				Login login = new Login(new SearchWindow());
+				login.visibleLogin(true);
+				loginSuccess = login.getLoginSuccess();
+			}
+		});
+
+		JButton jbLogout = new JButton("Logout");
+		jbLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				frame.dispose();
+			}
+		});
+		if (loginSuccess == 1)
+			jpLogin.add(jbLogout, BorderLayout.EAST);
+      //header
+      JLabel jlHeader = new JLabel("RIT Research Database", JLabel.CENTER);
+      jlHeader.setFont(new Font("headerFont", Font.PLAIN, 32));
+      jpLogin.add(jlHeader, BorderLayout.SOUTH);
+      jpTop.add(jpLogin, BorderLayout.NORTH);
          
-         //search panel
-         JPanel jpSearch = new JPanel(new BorderLayout());
-            //search header
-            JLabel jlSearchHeader = new JLabel("Search for a publication:");
-            jpSearch.add(jlSearchHeader, BorderLayout.NORTH);
+      //search panel
+		JPanel jpSearch = new JPanel(new BorderLayout());
+		// search header
+		JLabel jlSearchHeader = new JLabel("Search for a publication:");
+		jpSearch.add(jlSearchHeader, BorderLayout.NORTH);
+
+		// center panel for label, combobox, & textfield
+		jpSearchFields = new JPanel();
+		JLabel jlSearchBy = new JLabel("Search by");
+		jpSearchFields.add(jlSearchBy);
+
+		// search by options
+		jcbOptions = new JComboBox(SEARCH_OPTIONS);
+		jcbOptions.setEditable(false);
+		jcbOptions.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				// clear text field
+				jtfSearchTerms.setText("");
+
+				// update decoration on text field
+				undecorateTextField();
+				ArrayList<String> autoCompleteOptions;
+				switch (jcbOptions.getSelectedIndex()) {
+				// faculty
+				case 1:
+					autoCompleteOptions = pManager.getAllFaculty();
+					break;
+				// keyword
+				case 2:
+					autoCompleteOptions = pManager.getAllKeywords();
+					break;
+				// title
+				default:
+					autoCompleteOptions = pManager.getAllTitles();
+					break;
+				}
+
+				AutoCompleteDecorator.decorate(jtfSearchTerms, autoCompleteOptions, false);
+			}
+		});
+		jpSearchFields.add(jcbOptions);
+
+		// autocompleting text field
+		jtfSearchTerms = new JTextField();
+		jtfSearchTerms.setPreferredSize(new Dimension(300, 25));
+		AutoCompleteDecorator.decorate(jtfSearchTerms, pManager.getAllTitles(), false);
+		jpSearchFields.add(jtfSearchTerms);
+		jpSearch.add(jpSearchFields, BorderLayout.CENTER);
             
-            //center panel for label, combobox, & textfield
-            jpSearchFields = new JPanel();
-               JLabel jlSearchBy = new JLabel("Search by");
-               jpSearchFields.add(jlSearchBy);
-               
-               //search by options
-               jcbOptions = new JComboBox(SEARCH_OPTIONS);
-               jcbOptions.setEditable(false);
-               jcbOptions.addActionListener(new ActionListener(){
-                  public void actionPerformed(ActionEvent ae){
-                     //clear text field
-                     jtfSearchTerms.setText("");
-                     
-                     //update decoration on text field
-                     undecorateTextField();
-                     ArrayList<String> autoCompleteOptions;
-                     switch(jcbOptions.getSelectedIndex()){
-                        //faculty
-                        case 1:  autoCompleteOptions = pManager.getAllFaculty();
-                                 break;
-                        //keyword
-                        case 2:  autoCompleteOptions = pManager.getAllKeywords();
-                                 break;
-                        //title
-                        default: autoCompleteOptions = pManager.getAllTitles();
-                                 break;
-                     }
-                     
-                     AutoCompleteDecorator.decorate(jtfSearchTerms, autoCompleteOptions, false);
-                  }
-               });
-               jpSearchFields.add(jcbOptions);
-               
-               //autocompleting text field
-               jtfSearchTerms = new JTextField();
-               jtfSearchTerms.setPreferredSize(new Dimension(300,25));
-               AutoCompleteDecorator.decorate(jtfSearchTerms, pManager.getAllTitles(), false);
-               jpSearchFields.add(jtfSearchTerms);
-            jpSearch.add(jpSearchFields, BorderLayout.CENTER);
+		// search button
+		JPanel jpSearchBtn = new JPanel(new BorderLayout());
+		JButton jbSearch = new JButton("Search");
+		jbSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				performSearch();
+			}
+		});
+		jpSearchBtn.add(jbSearch, BorderLayout.WEST);
+		jpSearch.add(jpSearchBtn, BorderLayout.SOUTH);
+		jpTop.add(jpSearch, BorderLayout.CENTER);
+		frame.add(jpTop, BorderLayout.NORTH);
+
+		// results table
+		JPanel jpTable = new JPanel(new BorderLayout());
+		// table header
+		JPanel jpTableHead = new JPanel();
+		JLabel jlTitle = new JLabel("Title");
+		jlTitle.setPreferredSize(new Dimension(TITLE_WIDTH, TABLE_HEADER_HEIGHT));
+		jpTableHead.add(jlTitle, BorderLayout.NORTH);
             
-            //search button
-            JPanel jpSearchBtn = new JPanel(new BorderLayout());
-               JButton jbSearch = new JButton("Search");
-               jbSearch.addActionListener(new ActionListener(){
-                     public void actionPerformed(ActionEvent ae){
-                        performSearch(); 
-                     }
-                  });
-               jpSearchBtn.add(jbSearch, BorderLayout.WEST);
-            jpSearch.add(jpSearchBtn, BorderLayout.SOUTH);
-         jpTop.add(jpSearch, BorderLayout.CENTER);   
-      frame.add(jpTop, BorderLayout.NORTH);
-      
-      //results table
-      JPanel jpTable = new JPanel(new BorderLayout());
-         //table header
-         JPanel jpTableHead = new JPanel();
-            JLabel jlTitle = new JLabel("Title");
-            jlTitle.setPreferredSize(new Dimension(TITLE_WIDTH, TABLE_HEADER_HEIGHT));
-            jpTableHead.add(jlTitle, BorderLayout.NORTH);
-            
-            JLabel jlAuthors = new JLabel("Authors");
-            jlAuthors.setPreferredSize(new Dimension(AUTHORS_WIDTH, TABLE_HEADER_HEIGHT));
-            jpTableHead.add(jlAuthors, BorderLayout.NORTH);
-         jpTable.add(jpTableHead, BorderLayout.NORTH);
+      JLabel jlAuthors = new JLabel("Authors");
+      jlAuthors.setPreferredSize(new Dimension(AUTHORS_WIDTH, TABLE_HEADER_HEIGHT));
+      jpTableHead.add(jlAuthors, BorderLayout.NORTH);
+      jpTable.add(jpTableHead, BorderLayout.NORTH);
          
          //panel for publication rows
-         jpResults = new JPanel(new GridLayout(0,1));
-         JScrollPane jspResults = new JScrollPane(jpResults);
-         jspResults.setPreferredSize(new Dimension(TABLE_WIDTH,TABLE_HEIGHT));
-         jpTable.add(jspResults, BorderLayout.CENTER);
+      jpResults = new JPanel(new GridLayout(0,1));
+      JScrollPane jspResults = new JScrollPane(jpResults);
+      jspResults.setPreferredSize(new Dimension(TABLE_WIDTH,TABLE_HEIGHT));
+      jpTable.add(jspResults, BorderLayout.CENTER);
       frame.add(jpTable, BorderLayout.CENTER);
       
       //initially fills table with all publications
       fillTable(pManager.fetchAllPublications());
       
+      //bottom Jpannel
+		jpBottom = new JPanel(new BorderLayout());
+		JButton jbSubmit = new JButton("Submit speaking request");
+		jpBottom.add(jbSubmit, BorderLayout.WEST);
+		frame.add(jpBottom, BorderLayout.SOUTH);
+		jbSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				SpeakingRequestView.spekingRequestAdd();
+			}
+		});
       //handles frame appearance & location
       frame.pack();
       frame.setLocationRelativeTo(null);
