@@ -116,7 +116,7 @@ public class FacultyManager {
     * @param authors    the author names to look for
     * @return true if the names were found; false otherwise
     */
-   private boolean validateAuthors(ArrayList<String> authors){
+   public boolean validateAuthors(ArrayList<String> authors){
       boolean isValid = true;
       String query = "SELECT id FROM faculty WHERE CONCAT(fName,' ',lName) = ?;";
       
