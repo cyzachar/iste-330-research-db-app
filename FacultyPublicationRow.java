@@ -20,7 +20,7 @@ public class FacultyPublicationRow extends JPanel{
    //main is only for testing purposes
    public static void main(String[] args){
       JFrame jfMain = new JFrame();
-      jfMain.add(new FacultyPublicationRow(new Publication(21,"A title!","An abstract","A citation",getParamArrayList("Basket Weaving","Nonsense"),getParamArrayList("Steve Zilora","Dan Bogaard")),new FacultyView((new FacultyManager()).checkLogin("5f47859188a602594556580532e814a3","sjz@it.rit.edu"))),BorderLayout.CENTER);
+      jfMain.add(new FacultyPublicationRow(new Publication(21,"A title!","An abstract","A citation",getParamArrayList("Basket Weaving","Nonsense"),getParamArrayList("Steve Zilora","Dan Bogaard")),new FacultyView((new FacultyManager()).checkLogin("5f47859188a602594556580532e814a3","sjz@it.rit.edu"),new SearchWindow())),BorderLayout.CENTER);
       jfMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       jfMain.setLocationRelativeTo(null);
       jfMain.pack();
