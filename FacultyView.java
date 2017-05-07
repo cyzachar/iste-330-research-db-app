@@ -10,14 +10,14 @@ import java.awt.event.*;
 public class FacultyView{
    private Faculty user;
    private FacultyManager fManager = new FacultyManager();
-   //private SearchWindow mainWindow;
+   private SearchWindow mainWindow;
    private JPanel jpPapers;
    private final int TABLE_HEIGHT = 200;
    private final int TABLE_WIDTH = 470;
    
    //FOR TESTING ONLY
    public static void main(String[] args){
-      new FacultyView((new FacultyManager()).checkLogin("5f47859188a602594556580532e814a3","sjz@it.rit.edu"));
+      new FacultyView((new FacultyManager()).checkLogin("5f47859188a602594556580532e814a3","sjz@it.rit.edu"),new SearchWindow());
    }
    
    /**
@@ -25,9 +25,9 @@ public class FacultyView{
     * @param _user         the faculty member who is logged in
     * @param _mainWindow   the main search screen that the user is presented with once logged out
     */
-   public FacultyView(Faculty _user/*, SearchWindow _mainWindow*/){
+   public FacultyView(Faculty _user, SearchWindow _mainWindow){
       user = _user;
-      //mainWindow = _mainWindow;
+      mainWindow = _mainWindow;
       
       JFrame frame = new JFrame();
       frame.setTitle("RIT Research Database");
@@ -39,8 +39,8 @@ public class FacultyView{
             JButton jbLogout = new JButton("Logout");
             jbLogout.addActionListener(new ActionListener(){
                public void actionPerformed(ActionEvent ae){
-                  //mainWindow.show();
                   frame.dispose();
+                  mainWindow.show();
                }
             });
             jpLogout.add(jbLogout, BorderLayout.EAST);

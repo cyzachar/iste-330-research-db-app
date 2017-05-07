@@ -34,7 +34,7 @@ public class AddEditWindow{
          frame.setTitle((isEdit ? "Edit" : "Add") + " Publication");
 
          //title
-         frame.add(new JLabel(" Edit Publication:"), BorderLayout.NORTH);
+         frame.add(new JLabel((isEdit ? " Edit" : " Add") + " Publication:"), BorderLayout.NORTH);
          
          //all field labels on left of window
          JPanel jpLabels = new JPanel(new BorderLayout());

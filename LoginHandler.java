@@ -6,13 +6,15 @@ import javax.swing.*;
 public class LoginHandler extends JFrame implements ActionListener
 {   
    public static void main(String[] args){
-      LoginHandler lh = new LoginHandler();
+      LoginHandler lh = new LoginHandler(new SearchWindow());
    }
-   JPanel loginPanel = new JPanel();
-   JTextField jtfEmail;
-   JTextField jtfPassword;
+   private JPanel loginPanel = new JPanel();
+   private JTextField jtfEmail;
+   private JTextField jtfPassword;
+   private SearchWindow mainWindow;
 
-   public LoginHandler(){   
+   public LoginHandler(SearchWindow _mainWindow){
+      mainWindow = _mainWindow;   
       setTitle("Login");
       setLocationRelativeTo(null);
       setSize(250,200);
@@ -66,9 +68,8 @@ public class LoginHandler extends JFrame implements ActionListener
    public void actionPerformed(ActionEvent ae)
    {
       FacultyManager manager = new FacultyManager();
-      Faculty fac = new Faculty();
      
-      fac = manager.checkLogin(fac.getPassword(), fac.getEmail());
+      Faculty fac = manager.checkLogin(jtfPassword.getText(), jtfEmail.getText());
       if(fac == null)
       {
          JOptionPane.showMessageDialog(loginPanel,
@@ -76,7 +77,8 @@ public class LoginHandler extends JFrame implements ActionListener
       }
       else
       {
-         FacultyView fv = new FacultyView(fac);
+         mainWindow.hide();
+         FacultyView fv = new FacultyView(fac, mainWindow);
          
          //System.out.println("Login successful:\n" + fac);
       }   

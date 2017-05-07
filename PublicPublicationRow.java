@@ -91,14 +91,14 @@ public class PublicPublicationRow extends JPanel{
          
          //abstract & citation
          JPanel jpLowerInfo = new JPanel(new GridLayout(0,1));
-            jpLowerInfo.add(getTextBlock("Abstract: " + paper.getAbstract()));
-            jpLowerInfo.add(getTextBlock("Citation: " + paper.getCitation()));
+            jpLowerInfo.add(getTextBlock("Abstract: " + paper.getAbstract(),true));
+            jpLowerInfo.add(getTextBlock("Citation: " + paper.getCitation(),false));
          add(jpLowerInfo, BorderLayout.CENTER);
          
          //window appearance and location
-         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-         setLocationRelativeTo(null);
          pack();
+         setLocationRelativeTo(null);
+         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
          setVisible(true);
          
       }  //end PublicationDetails constructor
@@ -137,12 +137,15 @@ public class PublicPublicationRow extends JPanel{
     * @param text    the text to show in the text area
     * @return a text area with wrapped text
     */
-   private JTextArea getTextBlock(String text){
+   private JComponent getTextBlock(String text, boolean isScrollable){
       JTextArea block = new JTextArea(text);
       block.setLineWrap(true);
       block.setWrapStyleWord(true);
       block.setEditable(false);
       block.setBackground(null);
+      if(isScrollable){
+         return new JScrollPane(block);
+      }
       return block;
    }
    
