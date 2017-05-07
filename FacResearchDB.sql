@@ -15,7 +15,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
+DROP DATABASE IF EXISTS FacResearchDB;
 CREATE DATABASE FacResearchDB;
 USE FacResearchDB;
 
@@ -156,29 +156,21 @@ UNLOCK TABLES;
 -- Table structure for table `speakingrequest`
 --
 
-DROP TABLE IF EXISTS `speakingrequest`;
+DROP TABLE IF EXISTS `speaking_requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `speakingrequest` (
-  `speakingRequestID` int(11) NOT NULL AUTO_INCREMENT,
-  `personFirstname` varchar(50) NOT NULL,
-  `personLastname` varchar(50) NOT NULL,
-  `addresLine1` varchar(45) NOT NULL,
-  `addressLine2` varchar(50) NOT NULL,
-  `city` varchar(50) NOT NULL,
-  `request` varchar(200) NOT NULL,
-  PRIMARY KEY (`speakingRequestID`)
+CREATE TABLE `speaking_requests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `requesterName` varchar(50) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `phone` varchar(10),
+  `request` varchar(250) NOT NULL,
+  `facultyId` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_f` (`facultyId`),
+  CONSTRAINT `fk_f` FOREIGN KEY (`facultyId`) REFERENCES `faculty` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `speakingrequest`
---
-
-LOCK TABLES `speakingrequest` WRITE;
-/*!40000 ALTER TABLE `speakingrequest` DISABLE KEYS */;
-/*!40000 ALTER TABLE `speakingrequest` ENABLE KEYS */;
-UNLOCK TABLES;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
