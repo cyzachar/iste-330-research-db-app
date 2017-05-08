@@ -105,6 +105,40 @@ public class PublicPublicationRow extends JPanel{
 
     }  //end PublicationDetails class
     
+    //TO DO: ContactForm class
+    class ContactForm extends JFrame{
+      //instantiate SpeakingRequestManager
+      
+      public ContactForm(){
+         //window header
+         
+         //window instructions
+         
+         //requester name field
+         
+         //requester email field
+         
+         //requester phone field
+         
+         //author to contact checkboxes (use this row's publication obj to get authors)
+         
+         //message text area
+         
+         //send button
+            
+         //ActionListener for send button
+         
+            //check that name, email, author, and msg were included (phone is optional)
+         
+            //validate phone number format if included
+         
+            //strip out any non-numeric characters from phone# so it is simply a 10 digit number
+            
+            //call SpeakingRequestManager's appropriate addRequest method
+      }
+      
+    }
+    
     /**
      * Creates a String of comma separated values from an ArrayList
      * @param list    the ArrayList to turn into a string
