@@ -147,23 +147,20 @@ public class SearchWindow{
       frame.add(jpTable, BorderLayout.CENTER);
       
       //initially fills table with all publications
-      fillTable(pManager.fetchAllPublications());
+      ArrayList<Publication> papers = pManager.fetchAllPublications();
+      if(papers == null){
+         JOptionPane.showMessageDialog(null,"Could not connect to database","Connection Error",JOptionPane.ERROR_MESSAGE);
+      }
+      else{
+         fillTable(papers);
+         
+         //handles frame appearance & location
+         frame.pack();
+         frame.setLocationRelativeTo(null);
+         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+         frame.setVisible(true);
+      }
       
-      //bottom Jpannel
-		jpBottom = new JPanel(new BorderLayout());
-		JButton jbSubmit = new JButton("Submit speaking request");
-		jpBottom.add(jbSubmit, BorderLayout.WEST);
-		frame.add(jpBottom, BorderLayout.SOUTH);
-		jbSubmit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				//SpeakingRequestView.spekingRequestAdd();
-			}
-		});
-      //handles frame appearance & location
-      frame.pack();
-      frame.setLocationRelativeTo(null);
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setVisible(true);
    }  //end SearchWindow constructor
    
    /**
