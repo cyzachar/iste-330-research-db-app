@@ -17,39 +17,45 @@ public class LoginHandler extends JFrame implements ActionListener
       mainWindow = _mainWindow;   
       setTitle("Login");
       setLocationRelativeTo(null);
-      setSize(250,200);
+      //setSize(250,200);
+      
       add(loginPanel, BorderLayout.CENTER);
-      loginPanel.setLayout(new GridLayout(2,1));
+      loginPanel.setLayout(new GridLayout(0,1));
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      {
+      
+         JPanel jpEmail = new JPanel();
          JLabel jlEmail = new JLabel("Email:");
-         loginPanel.add(jlEmail);
-      }
-      {
+         jpEmail.add(jlEmail);
+         loginPanel.add(jpEmail);
+      
+      
          jtfEmail = new JTextField();
-         loginPanel.add(jtfEmail);
+         //loginPanel.add(jtfEmail);
          jtfEmail.setColumns(10);
-      }
-      {
+         jpEmail.add(jtfEmail);
+      
+         JPanel jpPassword = new JPanel();
          JLabel jlPassword = new JLabel("Password:");
-         loginPanel.add(jlPassword);  
-      }
-      {
+         jpPassword.add(jlPassword);
+         loginPanel.add(jpPassword);  
+      
+      
          jtfPassword = new JPasswordField(10);
-         loginPanel.add(jtfPassword);
+        // loginPanel.add(jtfPassword);
          jtfPassword.setColumns(10);
-      }
-      {
+         jpPassword.add(jtfPassword);
+      
+      
          JPanel buttonPane = new JPanel();
          add(buttonPane, BorderLayout.SOUTH);
-         {
+         
             JButton loginButton = new JButton("Login");
             loginButton.setActionCommand("OK");
             buttonPane.add(loginButton);
             getRootPane().setDefaultButton(loginButton);
             loginButton.addActionListener(this);
-         }
-         {
+         
+         
             JButton cancelButton = new JButton("Cancel");
             cancelButton.setActionCommand("Cancel");
             cancelButton.addActionListener(
@@ -59,8 +65,8 @@ public class LoginHandler extends JFrame implements ActionListener
                   }
                });
             buttonPane.add(cancelButton);
-         }
-      }
+         
+      pack();
       setVisible(true);
    } // end LoginHandler contructor
    
@@ -79,26 +85,6 @@ public class LoginHandler extends JFrame implements ActionListener
       {
          mainWindow.hide();
          FacultyView fv = new FacultyView(fac, mainWindow);
-         
-         //System.out.println("Login successful:\n" + fac);
       }   
    }
-   
- /*  private void displayPublications(ArrayList<Publication> papers)
-   {
-      for(Publication paper : papers)
-      {
-         System.out.println(paper);
-      }
-   }
-   
-   private ArrayList<String> getParamArrayList(String... params)
-   {
-      ArrayList<String> paramList = new ArrayList<String>();
-      for(String param : params)
-      {
-         paramList.add(param);
-      }
-      return paramList;
-   }*/
 }
