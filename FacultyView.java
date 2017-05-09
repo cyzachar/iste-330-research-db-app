@@ -66,6 +66,8 @@ public class FacultyView{
                }
             });
             jpAdd.add(jbAdd, BorderLayout.WEST);
+            
+            //TO DO: add button for faculty inbox
          jpTop.add(jpAdd, BorderLayout.SOUTH);
       frame.add(jpTop, BorderLayout.NORTH);
       
@@ -99,6 +101,23 @@ public class FacultyView{
       }
       jpPapers.revalidate();
       jpPapers.repaint();
+   }
+   
+   //TO DO: FacultyInbox inner class
+   class FacultyInbox extends JFrame{
+
+      public FacultyInbox(ArrayList<SpeakingRequest> messages){
+         //window header
+         
+         //scrollpane for messages
+         
+         //for each speaking request
+            
+            //add a panel showing speaking request details
+         
+         //close button     
+      }
+   
    }
    
 }  //end FacultyView class
