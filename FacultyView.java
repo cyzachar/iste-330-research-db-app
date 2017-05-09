@@ -26,7 +26,7 @@ public class FacultyView{
     * @param _mainWindow   the main search screen that the user is presented with once logged out
     */
    public FacultyView(Faculty _user, SearchWindow _mainWindow){
-      if(user == null){
+      if(_user == null){
          JOptionPane.showMessageDialog(null,"Could not connect to database","Connection Error",JOptionPane.ERROR_MESSAGE);
       }
       else{
