@@ -139,7 +139,7 @@ public class SearchWindow{
       jpTableHead.add(jlAuthors, BorderLayout.NORTH);
       jpTable.add(jpTableHead, BorderLayout.NORTH);
          
-         //panel for publication rows
+      //panel for publication rows
       jpResults = new JPanel(new GridLayout(0,1));
       JScrollPane jspResults = new JScrollPane(jpResults);
       jpTable.add(jspResults, BorderLayout.CENTER);

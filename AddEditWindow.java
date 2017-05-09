@@ -11,6 +11,8 @@ public class AddEditWindow{
    private FacultyManager fManager = new FacultyManager();
    private final int LABEL_WIDTH = 80;
    private final int LABEL_HEIGHT = 20;
+   private final int WINDOW_HEIGHT = 300;
+   private final int WINDOW_WIDTH = 500;
    private Publication paper = null;
    private Faculty user = null;
    
@@ -31,6 +33,7 @@ public class AddEditWindow{
       }
       
       JFrame frame = new JFrame();
+         frame.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOW_HEIGHT));
          frame.setTitle((isEdit ? "Edit" : "Add") + " Publication");
 
          //title
@@ -70,14 +73,14 @@ public class AddEditWindow{
             jpAllFields.add(jpTextFields, BorderLayout.NORTH);
             
             //all text areas
-            JPanel jpTextAreas = new JPanel(new GridLayout(0,1));
+            JPanel jpTextAreas = new JPanel(new BorderLayout());
                //abstract
                JTextArea jtaAbstract = getFieldTextArea(isEdit ? paper.getAbstract() : "");
-               jpTextAreas.add(new JScrollPane(jtaAbstract));
+               jpTextAreas.add(new JScrollPane(jtaAbstract),BorderLayout.CENTER);
                
                //citation
                JTextArea jtaCitation = getFieldTextArea(isEdit ? paper.getCitation() : "");
-               jpTextAreas.add(new JScrollPane(jtaCitation));
+               jpTextAreas.add(new JScrollPane(jtaCitation),BorderLayout.SOUTH);
             jpAllFields.add(jpTextAreas, BorderLayout.CENTER);
          frame.add(jpAllFields, BorderLayout.CENTER);
          
