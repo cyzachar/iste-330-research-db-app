@@ -26,10 +26,10 @@ public class SearchWindow{
    private PublicationManager pManager = new PublicationManager();
    
    private final String[] SEARCH_OPTIONS = {"Title","Faculty","Keyword"};
-   private final int TABLE_HEIGHT = 200;
-   private final int TABLE_WIDTH = 650;
+   private final int WINDOW_HEIGHT = 360;
+   private final int WINDOW_WIDTH = 680;
    private final int TITLE_WIDTH = 400;
-   private final int AUTHORS_WIDTH = 240;
+   private final int AUTHORS_WIDTH = 200;
    private final int TABLE_HEADER_HEIGHT = 20;
    
    //FOR TESTING ONLY
@@ -43,7 +43,7 @@ public class SearchWindow{
 	public SearchWindow() {
 		frame = new JFrame();
 		frame.setTitle("RIT Research Database");
-
+      frame.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOW_HEIGHT));
 		//login button, header, & search box
 		JPanel jpTop = new JPanel(new BorderLayout());
 		//panel for login button & header
@@ -142,7 +142,6 @@ public class SearchWindow{
          //panel for publication rows
       jpResults = new JPanel(new GridLayout(0,1));
       JScrollPane jspResults = new JScrollPane(jpResults);
-      jspResults.setPreferredSize(new Dimension(TABLE_WIDTH,TABLE_HEIGHT));
       jpTable.add(jspResults, BorderLayout.CENTER);
       frame.add(jpTable, BorderLayout.CENTER);
       

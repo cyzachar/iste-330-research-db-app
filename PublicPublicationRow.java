@@ -11,9 +11,11 @@ public class PublicPublicationRow extends JPanel{
    private Publication paper;
    private String authors = "";
    private final int TITLE_WIDTH = 400;
-   private final int AUTHORS_WIDTH = 240;
+   private final int AUTHORS_WIDTH = 200;
    private final int LABEL_HEIGHT = 20;
    private final int FONT_SIZE = 14;
+   private final int DETAILS_HEIGHT = 300;
+   private final int DETAILS_WIDTH = 500;
    
    //main is only for testing purposes
    public static void main(String[] args){
@@ -50,6 +52,8 @@ public class PublicPublicationRow extends JPanel{
       JLabel jlAuthors = new JLabel(authors, SwingConstants.LEFT);
       jlAuthors.setPreferredSize(new Dimension(AUTHORS_WIDTH, LABEL_HEIGHT));
       jlAuthors.setFont(rowFont);
+      jlAuthors.setToolTipText(authors);
+      addRowMouseListener(jlAuthors);
       add(jlAuthors);
       
       //mouselistener for row
@@ -69,13 +73,15 @@ public class PublicPublicationRow extends JPanel{
       public PublicationDetails(){
          //window appearance
          setTitle(paper.getTitle());
-         setMinimumSize(new Dimension(500,250));
+         setPreferredSize(new Dimension(DETAILS_WIDTH,DETAILS_HEIGHT));
          
          JPanel jpTopInfo = new JPanel(new GridLayout(0,1));
             //title
-            JLabel jlTitle = new JLabel(paper.getTitle(), SwingConstants.CENTER);
+            String title = paper.getTitle();
+            JLabel jlTitle = new JLabel(title, SwingConstants.CENTER);
                Font titleFont = new Font("titleFont", Font.PLAIN, 30);
                jlTitle.setFont(titleFont);
+               jlTitle.setToolTipText(title);
             jpTopInfo.add(jlTitle);
 
             
@@ -90,9 +96,9 @@ public class PublicPublicationRow extends JPanel{
          add(jpTopInfo, BorderLayout.NORTH);
          
          //abstract & citation
-         JPanel jpLowerInfo = new JPanel(new GridLayout(0,1));
-            jpLowerInfo.add(getTextBlock("Abstract: " + paper.getAbstract(),true));
-            jpLowerInfo.add(getTextBlock("Citation: " + paper.getCitation(),false));
+         JPanel jpLowerInfo = new JPanel(new BorderLayout());
+            jpLowerInfo.add(getTextBlock("Abstract: " + paper.getAbstract(),true),BorderLayout.CENTER);
+            jpLowerInfo.add(getTextBlock("Citation: " + paper.getCitation(),false),BorderLayout.SOUTH);
          add(jpLowerInfo, BorderLayout.CENTER);
          
          //window appearance and location
