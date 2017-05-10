@@ -1,0 +1,76 @@
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class MessageRow extends JPanel {
+	
+	private SpeakingRequest speakingRequest;
+	private final int TITLE_WIDTH = 300;
+	private final int ROW_HEIGHT = 20;
+	private final int FONT_SIZE = 14;
+
+	// main is only for testing purposes
+	public static void main(String[] args) {
+		JFrame jfMain = new JFrame();
+		jfMain.add(new MessageRow(new SpeakingRequest("P.H.Pereira", "phpereira@gmail.com", "speakingrequest")),
+				BorderLayout.CENTER);
+		jfMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jfMain.setLocationRelativeTo(null);
+		jfMain.pack();
+		jfMain.setVisible(true);
+	}
+
+	public MessageRow(SpeakingRequest _speakingRequest) {
+		speakingRequest = _speakingRequest;
+		Font rowFont = new Font("rowFont", Font.PLAIN, FONT_SIZE);
+
+		JPanel namePannel = new JPanel(new BorderLayout());
+		JLabel nameLbl = new JLabel("Name :");
+		nameLbl.setPreferredSize(new Dimension(TITLE_WIDTH, ROW_HEIGHT));
+		nameLbl.setFont(rowFont);
+		JLabel nameTxt = new JLabel(speakingRequest.getRequesterName());
+		nameTxt.setPreferredSize(new Dimension(TITLE_WIDTH, ROW_HEIGHT));
+		nameTxt.setFont(rowFont);
+		namePannel.add(nameLbl, BorderLayout.LINE_START);
+		namePannel.add(nameTxt, BorderLayout.LINE_END);
+		add(namePannel, BorderLayout.NORTH);
+
+		JPanel emailPannel = new JPanel(new BorderLayout());
+		JLabel emailLbl = new JLabel("Email :");
+		emailLbl.setPreferredSize(new Dimension(TITLE_WIDTH, ROW_HEIGHT));
+		emailLbl.setFont(rowFont);
+		JLabel emailTxt = new JLabel(speakingRequest.getRequesterEmail());
+		emailTxt.setPreferredSize(new Dimension(TITLE_WIDTH, ROW_HEIGHT));
+		emailTxt.setFont(rowFont);
+		emailPannel.add(emailLbl, BorderLayout.LINE_START);
+		emailPannel.add(emailTxt, BorderLayout.LINE_END);
+		add(emailPannel, BorderLayout.CENTER);
+
+		JPanel phonePannel = new JPanel(new BorderLayout());
+		JLabel phoneLbl = new JLabel("Email :");
+		phoneLbl.setPreferredSize(new Dimension(TITLE_WIDTH, ROW_HEIGHT));
+		phoneLbl.setFont(rowFont);
+		JLabel phoneTxt = new JLabel(speakingRequest.getRequesterPhone());
+		phoneTxt.setPreferredSize(new Dimension(TITLE_WIDTH, ROW_HEIGHT));
+		phoneTxt.setFont(rowFont);
+		phonePannel.add(phoneLbl, BorderLayout.LINE_START);
+		phonePannel.add(phoneTxt, BorderLayout.LINE_END);
+		add(phonePannel, BorderLayout.CENTER);
+
+		JPanel messagePannel = new JPanel(new BorderLayout());
+		JLabel messageLbl = new JLabel("Email :");
+		messageLbl.setPreferredSize(new Dimension(TITLE_WIDTH, ROW_HEIGHT));
+		messageLbl.setFont(rowFont);
+		JLabel messageTxt = new JLabel(speakingRequest.getMsg());
+		messageTxt.setPreferredSize(new Dimension(TITLE_WIDTH, ROW_HEIGHT));
+		messageTxt.setFont(rowFont);
+		messagePannel.add(messageLbl, BorderLayout.LINE_START);
+		messagePannel.add(messageTxt, BorderLayout.LINE_END);
+		add(messagePannel, BorderLayout.CENTER);
+
+	} // end MessageRow constructor
+}
