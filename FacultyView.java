@@ -10,6 +10,8 @@ import java.awt.event.*;
 public class FacultyView{
    private Faculty user;
    private FacultyManager fManager = new FacultyManager();
+   private SpeakingRequestManager speakingRequestManager = new SpeakingRequestManager();
+	private ArrayList<SpeakingRequest> speakingRequests = new ArrayList<SpeakingRequest>();
    private SearchWindow mainWindow;
    private JPanel jpPapers;
    private final int TABLE_HEIGHT = 200;
@@ -71,7 +73,17 @@ public class FacultyView{
                });
                jpAdd.add(jbAdd, BorderLayout.WEST);
                
-               //TO DO: add button for faculty inbox
+          //TO DO: add button for faculty inbox
+         speakingRequests = speakingRequestManager.getRequestsByFaculty(user.getId());
+			int size = speakingRequests.size();
+			JButton jbFacultyInbox = new JButton("View Messages ("+size+") ");
+			jbFacultyInbox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent ae) {
+					new FacultyInbox(speakingRequests);
+				}
+			});
+			jpAdd.add(jbFacultyInbox, BorderLayout.EAST);
+         
             jpTop.add(jpAdd, BorderLayout.SOUTH);
          frame.add(jpTop, BorderLayout.NORTH);
          
@@ -109,20 +121,50 @@ public class FacultyView{
    }
    
    //TO DO: FacultyInbox inner class
-   class FacultyInbox extends JFrame{
+	class FacultyInbox extends JFrame {
+		private final int WINDOW_HEIGHT = 300;
+		private final int WINDOW_WIDTH = 500;
+		private JPanel jpMessages;
 
-      public FacultyInbox(ArrayList<SpeakingRequest> messages){
-         //window header
-         
-         //scrollpane for messages
-         
-         //for each speaking request
-            
-            //add a panel showing speaking request details
-         
-         //close button     
-      }
-   
-   }
-   
+		public FacultyInbox(ArrayList<SpeakingRequest> messages) {
+			// window header
+			JFrame frame = new JFrame();
+			frame.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+			frame.setTitle("Faculty Inbox");
+			// title
+			frame.add(new JLabel("Inbox"), BorderLayout.NORTH);
+
+			// add a panel showing speaking request details
+			JPanel jpTable = new JPanel(new BorderLayout());
+			jpMessages = new JPanel(new GridLayout(0, 1));
+			JScrollPane jspMessages = new JScrollPane(jpMessages);
+			jspMessages.setPreferredSize(new Dimension(TABLE_WIDTH, TABLE_HEIGHT));
+			jpTable.add(jspMessages, BorderLayout.CENTER);
+			frame.add(jpTable, BorderLayout.CENTER);
+
+			// for each speaking request
+			reloadMessageTable(messages);
+
+			// cancel button
+			JButton jbCancel = new JButton("Cancel");
+			jbCancel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent ae) {
+					frame.dispose();
+				}
+			});
+			frame.add(jbCancel, BorderLayout.SOUTH);
+
+		}
+
+		public void reloadMessageTable(ArrayList<SpeakingRequest> requests) {
+			jpMessages.removeAll();
+			for (SpeakingRequest request : requests) {
+				jpMessages.add(new MessageRow(request));
+			}
+			jpMessages.revalidate();
+			jpMessages.repaint();
+		}
+
+	}
+ 
 }  //end FacultyView class
