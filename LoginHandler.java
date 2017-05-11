@@ -78,8 +78,8 @@ public class LoginHandler extends JFrame implements ActionListener
       Faculty fac = manager.checkLogin(jtfPassword.getText(), jtfEmail.getText());
       if(fac == null)
       {
-         JOptionPane.showMessageDialog(loginPanel,
-            "Login Failed","Failed to Login", JOptionPane.PLAIN_MESSAGE);       
+         JOptionPane.showMessageDialog(loginpanel,
+         "Login Failed", "Failed to login", JOptionPane.WARNING_MESSAGE);    
       }
       else
       {
