@@ -6,8 +6,7 @@ import javax.swing.*;
 public class LoginHandler extends JFrame implements ActionListener
 {   
    public static void main(String[] args){
-            LoginHandler lh = new LoginHandler(new SearchWindow());
-
+      LoginHandler lh = new LoginHandler(new SearchWindow());
    }
    private JPanel loginPanel = new JPanel();
    private JTextField jtfEmail;
@@ -66,8 +65,7 @@ public class LoginHandler extends JFrame implements ActionListener
                   }
                });
             buttonPane.add(cancelButton);
-      
-      mainWindow.hide();
+         
       pack();
       setVisible(true);
    } // end LoginHandler contructor
@@ -77,8 +75,7 @@ public class LoginHandler extends JFrame implements ActionListener
    {
       FacultyManager manager = new FacultyManager();
      
-      Faculty fac = manager.checkLogin(jtfPassword.getText(), jtfEmail.getText());    
-      
+      Faculty fac = manager.checkLogin(jtfPassword.getText(), jtfEmail.getText());
       if(fac == null)
       {
          JOptionPane.showMessageDialog(loginPanel,
@@ -86,8 +83,8 @@ public class LoginHandler extends JFrame implements ActionListener
       }
       else
       {
+         mainWindow.hide();
          FacultyView fv = new FacultyView(fac, mainWindow);
-         mainWindow.show();
       }   
    }
 }
