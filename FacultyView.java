@@ -123,7 +123,7 @@ public class FacultyView{
    }
    
    /**
-    * 
+    * FacultyInbox generates list from requesters 
     */
 	class FacultyInbox extends JFrame {
 		private final int WINDOW_HEIGHT = 300;
@@ -164,7 +164,11 @@ public class FacultyView{
          frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
          frame.setVisible(true);
 		}
-
+      
+   /**
+    * reloadMessageTable - respondsible for reloading requests
+    *   reload by using revalidate / repaint method
+    */
 		public void reloadMessageTable(ArrayList<SpeakingRequest> requests) {
 			jpMessages.removeAll();
 			for (SpeakingRequest request : requests) {
