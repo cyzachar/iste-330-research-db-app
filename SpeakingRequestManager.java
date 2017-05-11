@@ -7,14 +7,18 @@ public class SpeakingRequestManager{
    private ResearchDb db;
    
    /**
-    * 
+    * Initializes database object
     */
    public SpeakingRequestManager(){
       db = new ResearchDb();
    }
    
    /**
-    * 
+    * Adds a speaking request to the db
+    * @param name          the name of the requestor
+    * @param email         the email of the requestor
+    * @param recipients    the names of the authors to send the message to
+    * @param msg           the msg to send
     */
 	public boolean addRequest(String name, String email, ArrayList<String> recipients, String msg) {
 		boolean success = true;
@@ -52,7 +56,6 @@ public class SpeakingRequestManager{
 			} catch (DLException e1) {
 				e1.printStackTrace();
 			}
-			e.printStackTrace();
 			success = false;
 		}
 
@@ -60,7 +63,12 @@ public class SpeakingRequestManager{
 	}
    
    /**
-    * 
+    * Adds a speaking request to the db
+    * @param name          the name of the requestor
+    * @param email         the email of the requestor
+    * @param phone         the phone number of the requestor
+    * @param recipients    the names of the authors to send the message to
+    * @param msg           the msg to send
     */
 	public boolean addRequest(String name, String email, String phone, ArrayList<String> recipients, String msg) {
 		boolean success = true;
@@ -98,7 +106,6 @@ public class SpeakingRequestManager{
 //			} catch (DLException e1) {
 //				e1.printStackTrace();
 //			}
-			e.printStackTrace();
 			success = false;
 		}
 
@@ -110,7 +117,7 @@ public class SpeakingRequestManager{
     */
 	public ArrayList<SpeakingRequest> getRequestsByFaculty(int facId) {
 
-		String query = "select * from speaking_requests where facultyId = ?";
+		String query = "SELECT requesterName, email, request, phone FROM speaking_requests WHERE facultyId = ?";
 		ArrayList<String> id = new ArrayList<String>();
 		ArrayList<ArrayList<String>> speakingRequests = new ArrayList<ArrayList<String>>();
 		ArrayList<SpeakingRequest> speakingRequestsList = new ArrayList<SpeakingRequest>();
@@ -121,13 +128,21 @@ public class SpeakingRequestManager{
 			speakingRequests = db.getData(query, id, false);
 			// go through returned data, creating an ArrayList of SpeakingRequests
 			for (ArrayList<String> arrayList : speakingRequests) {
-				SpeakingRequest speakingRequest = new SpeakingRequest(arrayList.get(1), arrayList.get(2),
-						arrayList.get(3));
+            System.out.println(arrayList);
+            SpeakingRequest speakingRequest = null;
+            if(arrayList.get(3).equals("")){
+               speakingRequest = new SpeakingRequest(arrayList.get(0), arrayList.get(1),
+   						arrayList.get(2));
+            }
+            else{
+               speakingRequest = new SpeakingRequest(arrayList.get(0), arrayList.get(1),
+   						arrayList.get(2), arrayList.get(3));
+            }
 				speakingRequestsList.add(speakingRequest);
 			}
 
 		} catch (DLException e) {
-			e.printStackTrace();
+			return null;
 		}
 
 		return speakingRequestsList;
