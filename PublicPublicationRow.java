@@ -4,7 +4,8 @@ import java.awt.*;         //for Cursor
 import java.awt.event.*;   //for MouseAdapter
 
 /**
- * Displays paper title and authors and shows details when clicked
+ * Displays paper title and authors and shows details when clicked, also
+ * allowing the user to contact the paper's authors
  * @author Team 17: Fareed Abolhassani, Abdulaziz Alshkrah, Craig Price, Cynthia Zachar
  */
 public class PublicPublicationRow extends JPanel{
@@ -101,6 +102,7 @@ public class PublicPublicationRow extends JPanel{
             jpLowerInfo.add(getTextBlock("Citation: " + paper.getCitation(),false),BorderLayout.SOUTH);
          add(jpLowerInfo, BorderLayout.CENTER);
          
+         //contact button
          JPanel jpContact = new JPanel(new BorderLayout());
             JButton jbContact = new JButton("Contact author" + ((authors.contains(",")) ? "s" : ""));
             jbContact.addActionListener(new ActionListener(){
@@ -121,15 +123,22 @@ public class PublicPublicationRow extends JPanel{
 
     }  //end PublicationDetails class
     
-    
+    /**
+     * Provides a window that the user can use to contact a faculty member
+     */
     class ContactForm extends JFrame{
       private SpeakingRequestManager srManager = new SpeakingRequestManager();
       private ArrayList<JCheckBox> authorCheckBoxes = new ArrayList();
       
+      /**
+       * Displays a contact window with fields for name, email, phone, and message 
+       * and checkboxes for recipients
+       */
       public ContactForm(){
          setTitle("Faculty Contact Form");
          setPreferredSize(new Dimension(400,400));
          
+         //header & description
          JPanel jpTop = new JPanel(new BorderLayout());
             JLabel jlHeader = new JLabel("Contact Form");
             jpTop.add(jlHeader,BorderLayout.NORTH);
@@ -138,21 +147,27 @@ public class PublicPublicationRow extends JPanel{
                                  + "please include date, time, and location details with your message.",false),BorderLayout.SOUTH);
          add(jpTop, BorderLayout.NORTH);
          
+         //all fields - from name to msg
          JPanel jpCenter = new JPanel(new BorderLayout());
+            //all textfields and checkboxes with their labels
             JPanel jpFields = new JPanel(new BorderLayout());
+               //all textfields
                JPanel jpTextFields = new JPanel(new GridLayout(0,1));
+                  //name
                   JPanel jpName = new JPanel();
-                     jpName.add(new JLabel("Your name: "));
+                     jpName.add(new JLabel("Your name*: "));
                      JTextField jtfName = new JTextField(20);
                      jpName.add(jtfName);
                   jpTextFields.add(jpName);
                   
+                  //email
                   JPanel jpEmail = new JPanel();
-                     jpEmail.add(new JLabel("Your email: "));
+                     jpEmail.add(new JLabel("Your email*: "));
                      JTextField jtfEmail = new JTextField(20);
                      jpEmail.add(jtfEmail);
                   jpTextFields.add(jpEmail);
                   
+                  //phone
                   JPanel jpPhone = new JPanel();
                      jpPhone.add(new JLabel("Your phone#: "));
                      JTextField jtfPhone = new JTextField(20);
@@ -160,8 +175,9 @@ public class PublicPublicationRow extends JPanel{
                   jpTextFields.add(jpPhone);
                jpFields.add(jpTextFields, BorderLayout.NORTH);
                
+               //author checkboxes
                JPanel jpContacts = new JPanel(new BorderLayout());
-                  jpContacts.add(new JLabel("Faculty to contact: "), BorderLayout.NORTH);
+                  jpContacts.add(new JLabel("Faculty to contact*: "), BorderLayout.NORTH);
                   JPanel jpAuthors = new JPanel(new GridLayout(0,1));
                      for(String author : paper.getAuthors()){
                         JCheckBox jcbAuthor = new JCheckBox(author);
@@ -171,9 +187,10 @@ public class PublicPublicationRow extends JPanel{
                   jpContacts.add(jpAuthors, BorderLayout.CENTER);
                jpFields.add(jpContacts, BorderLayout.SOUTH);
             jpCenter.add(jpFields, BorderLayout.NORTH);
-               
+            
+            //msg text area   
             JPanel jpMsg = new JPanel(new BorderLayout());
-               jpMsg.add(new JLabel("Message:"), BorderLayout.NORTH);
+               jpMsg.add(new JLabel("Message*:"), BorderLayout.NORTH);
                JTextArea jtaMsg = new JTextArea();
                jtaMsg.setLineWrap(true);
                jtaMsg.setWrapStyleWord(true);
@@ -181,38 +198,53 @@ public class PublicPublicationRow extends JPanel{
             jpCenter.add(jpMsg, BorderLayout.CENTER);
          add(jpCenter, BorderLayout.CENTER);
          
+         //send button
          JPanel jpControls = new JPanel(new BorderLayout());
             JButton jbSend = new JButton("Send");
+            
+            //send action
             jbSend.addActionListener(new ActionListener(){
                public void actionPerformed(ActionEvent ae){
                   String missingInfo = "";
+                  
+                  //get text from fields
                   String name = jtfName.getText();
                   String email = jtfEmail.getText();
                   String msg = jtaMsg.getText();
                   
+                  //validate name
                   if(name.length() == 0){
                      missingInfo += "name, ";
                   }
+                  //validate email
                   if(email.length() == 0){
                      missingInfo += "email, ";
                   }
+                  
+                  //gather recipient names from checkboxes
                   ArrayList<String> recipients = new ArrayList<String>();
                   for(JCheckBox author : authorCheckBoxes){
                      if(author.isSelected()){
                         recipients.add(author.getText());
                      }
                   }
+                  
+                  //validate recipients
                   if(recipients.size() == 0){
                      missingInfo += "recipient(s), ";
                   }
+                  
+                  //validate msg
                   if(msg.length() == 0){
                      missingInfo += "message, ";
                   }
                   
+                  //some info missing => error msg
                   if(missingInfo.length() > 0){
                      missingInfo = missingInfo.substring(0, missingInfo.length() - 2);
                      JOptionPane.showMessageDialog(null,"Please provide " + missingInfo, "Required Information Omitted", JOptionPane.WARNING_MESSAGE);
                   }
+                  //all info provided => continue
                   else{
                      String phone = jtfPhone.getText();
                      //phone provided
@@ -225,10 +257,12 @@ public class PublicPublicationRow extends JPanel{
                         }
                         //valid phone
                         else{
+                           //send successful
                            if(srManager.addRequest(name,email,phone,recipients,msg)){
                               JOptionPane.showMessageDialog(null,"Your message was sent successfully","Submission Successful",JOptionPane.INFORMATION_MESSAGE);
                               ContactForm.this.dispose();
                            }
+                           //send unsuccessful
                            else{
                               JOptionPane.showMessageDialog(null,"Your message could not be sent","Submission Unsuccessful",JOptionPane.ERROR_MESSAGE);
                            }
@@ -236,16 +270,18 @@ public class PublicPublicationRow extends JPanel{
                      }
                      //phone not provided
                      else{
+                        //send successful
                         if(srManager.addRequest(name,email,recipients,msg)){
-                              JOptionPane.showMessageDialog(null,"Your message was sent successfully","Submission Successful",JOptionPane.INFORMATION_MESSAGE);
-                              ContactForm.this.dispose();
-                           }
-                           else{
-                              JOptionPane.showMessageDialog(null,"Your message could not be sent","Submission Unsuccessful",JOptionPane.ERROR_MESSAGE);
-                           }
-                     }
-                  }
-               }
+                           JOptionPane.showMessageDialog(null,"Your message was sent successfully","Submission Successful",JOptionPane.INFORMATION_MESSAGE);
+                           ContactForm.this.dispose();
+                        }
+                        //send unsuccessful
+                        else{
+                           JOptionPane.showMessageDialog(null,"Your message could not be sent","Submission Unsuccessful",JOptionPane.ERROR_MESSAGE);
+                        }
+                     }  //end phone omitted
+                  }  //end all info provided
+               }  //end actionPerformed
             });
             jpControls.add(jbSend, BorderLayout.EAST);
          add(jpControls, BorderLayout.SOUTH);
@@ -257,7 +293,7 @@ public class PublicPublicationRow extends JPanel{
          setVisible(true);
       }
       
-    }
+    } //end ContactForm
     
     /**
      * Creates a String of comma separated values from an ArrayList

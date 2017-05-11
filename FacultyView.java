@@ -19,7 +19,9 @@ public class FacultyView{
    
    //FOR TESTING ONLY
    public static void main(String[] args){
-      new FacultyView((new FacultyManager()).checkLogin("5f47859188a602594556580532e814a3","sjz@it.rit.edu"),new SearchWindow());
+      SearchWindow tempMain = new SearchWindow();
+      tempMain.hide();
+      new FacultyView((new FacultyManager()).checkLogin("5f47859188a602594556580532e814a3","sjz@it.rit.edu"),tempMain);
    }
    
    /**
@@ -153,7 +155,12 @@ public class FacultyView{
 				}
 			});
 			frame.add(jbCancel, BorderLayout.SOUTH);
-
+         
+         //window appearance and location
+         frame.pack();
+         frame.setLocationRelativeTo(null);
+         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+         frame.setVisible(true);
 		}
 
 		public void reloadMessageTable(ArrayList<SpeakingRequest> requests) {

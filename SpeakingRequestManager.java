@@ -1,27 +1,31 @@
 import java.util.*;  //for ArrayList
 
+/**
+ * 
+ */
 public class SpeakingRequestManager{
    private ResearchDb db;
    
+   /**
+    * 
+    */
    public SpeakingRequestManager(){
       db = new ResearchDb();
    }
    
+   /**
+    * 
+    */
 	public boolean addRequest(String name, String email, ArrayList<String> recipients, String msg) {
 		boolean success = true;
 		String fID;
 
 		ArrayList<String> authors = new ArrayList<String>();
-		ArrayList<String> request = new ArrayList<String>();
+		ArrayList<String> params = getParamArrayList(name,email,msg);
 
 		// create query to insert just name, email, msg, facId fields
-		String query1 = "insert into speaking_requests (requesterName, email, phone, request,facultyId) values(?,?,?,?,?)";
+		String query1 = "INSERT INTO speaking_requests (requesterName, email, request, facultyId) VALUES(?,?,?,?)";
 		String query2 = "SELECT id FROM faculty WHERE CONCAT(fName,' ',lName) = ?";
-
-		request.add(name);
-		request.add(email);
-		request.add("");
-		request.add(msg);
 
 		try {
 
@@ -34,10 +38,10 @@ public class SpeakingRequestManager{
 				authors.add(recipient);
 				fID = db.getData(query2, authors, false).get(0).get(0);
 
-				request.add(fID);
+				params.add(fID);
 
 				// call db setData with query and ArrayList of values
-				db.setData(query1, request);
+				db.setData(query1, params);
 
 			}
 			// end transaction
@@ -55,21 +59,19 @@ public class SpeakingRequestManager{
 		return success;
 	}
    
+   /**
+    * 
+    */
 	public boolean addRequest(String name, String email, String phone, ArrayList<String> recipients, String msg) {
 		boolean success = true;
 		String fID;
 
 		ArrayList<String> authors = new ArrayList<String>();
-		ArrayList<String> request = new ArrayList<String>();
+		ArrayList<String> params = getParamArrayList(name,email,phone,msg);
 
 		// create query to insert just name, email, msg, facId fields
-		String query1 = "insert into speaking_requests (requesterName, email, phone, request,facultyId) values(?,?,?,?,?)";
+		String query1 = "INSERT INTO speaking_requests (requesterName, email, phone, request, facultyId) VALUES(?,?,?,?,?)";
 		String query2 = "SELECT id FROM faculty WHERE CONCAT(fName,' ',lName) = ?";
-
-		request.add(name);
-		request.add(email);
-		request.add(phone);
-		request.add(msg);
 
 		try {
 
@@ -81,11 +83,11 @@ public class SpeakingRequestManager{
 				authors.add(recipient);
 				fID = db.getData(query2, authors, false).get(0).get(0);
 
-				request.add(fID);
+				params.add(fID);
 
 				// call db setData with query and ArrayList of values
-				db.setData(query1, request);
-				request.remove(4);
+				db.setData(query1, params);
+				params.remove(4);
 				authors.remove(0);
 			}
 			// end transaction
@@ -103,6 +105,9 @@ public class SpeakingRequestManager{
 		return success;
 	}
    
+   /**
+    * 
+    */
 	public ArrayList<SpeakingRequest> getRequestsByFaculty(int facId) {
 
 		String query = "select * from speaking_requests where facultyId = ?";
@@ -127,4 +132,16 @@ public class SpeakingRequestManager{
 
 		return speakingRequestsList;
 	}
-}
+   
+   /**
+    * Fills an ArrayList with a series of Strings
+    * @return  an ArrayList containing the given Strings
+    */
+   private ArrayList<String> getParamArrayList(String... params){
+      ArrayList<String> paramList = new ArrayList<String>();
+      for(String param : params){
+         paramList.add(param);
+      }
+      return paramList;
+   }
+}  //end SpeakingRequestManager
