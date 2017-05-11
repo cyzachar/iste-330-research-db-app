@@ -54,7 +54,7 @@ public class SpeakingRequestManager{
 			try {
 				db.rollbackTrans();
 			} catch (DLException e1) {
-				e1.printStackTrace();
+				
 			}
 			success = false;
 		}
@@ -84,7 +84,7 @@ public class SpeakingRequestManager{
 		try {
 
 			// start transaction
-			//db.startTrans();
+			db.startTrans();
 			// for each author
 			for (String recipient : recipients) {
 				// get author's faculty id
@@ -99,13 +99,13 @@ public class SpeakingRequestManager{
 				authors.remove(0);
 			}
 			// end transaction
-			//db.endTrans();
+			db.endTrans();
 		} catch (DLException e) {
-//			try {
-//				db.rollbackTrans();
-//			} catch (DLException e1) {
-//				e1.printStackTrace();
-//			}
+			try {
+				db.rollbackTrans();
+			} catch (DLException e1) {
+				
+			}
 			success = false;
 		}
 

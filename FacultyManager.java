@@ -25,7 +25,7 @@ public class FacultyManager {
     */
 	public Faculty checkLogin(String password, String email) {
 
-		String query = "select * from faculty where password = ? and email = ?";
+		String query = "select * from faculty where password = md5(?) and email = ?";
 
 		try {
 			Faculty faculty = new Faculty();
