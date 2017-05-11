@@ -1,8 +1,14 @@
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.*;      //for JPanel
+import java.awt.*;         //for Cursor
 
+/**
+ * Allow the user to view a message
+ * Message consists of Name, Email, Phone, Message 
+ * @author Team 17: Fareed Abolhassani, Abdulaziz Alshkrah, Craig Price, Cynthia Zachar
+ */
 public class MessageRow extends JPanel {
 	
+   //attributes 
 	private SpeakingRequest speakingRequest;
 	private final int FONT_SIZE = 14;
 
@@ -16,12 +22,16 @@ public class MessageRow extends JPanel {
 		jfMain.pack();
 		jfMain.setVisible(true);
 	}
-
+   
+   /**
+    * Creates & displays the MessageRow window 
+    */
 	public MessageRow(SpeakingRequest _speakingRequest) {
 		speakingRequest = _speakingRequest;
 		Font rowFont = new Font("rowFont", Font.PLAIN, FONT_SIZE);
       setLayout(new BorderLayout());
       
+      //Add JLabels to the JPanel
       JPanel jpDetails = new JPanel(new FlowLayout(FlowLayout.LEFT));
    		JPanel namePanel = new JPanel(new BorderLayout());
       		JLabel nameLbl = new JLabel("Name :");
@@ -31,7 +41,8 @@ public class MessageRow extends JPanel {
       		namePanel.add(nameLbl, BorderLayout.LINE_START);
       		namePanel.add(nameTxt, BorderLayout.LINE_END);
    		jpDetails.add(namePanel);
-   
+         
+         //Email panel 
    		JPanel emailPanel = new JPanel(new BorderLayout());
       		JLabel emailLbl = new JLabel("Email :");
       		emailLbl.setFont(rowFont);
@@ -41,6 +52,8 @@ public class MessageRow extends JPanel {
       		emailPanel.add(emailTxt, BorderLayout.LINE_END);
    		jpDetails.add(emailPanel);
          
+         
+         //If the requester have - show phone number   
          if(speakingRequest.getRequesterPhone().length() > 0){
       		JPanel phonePanel = new JPanel(new BorderLayout());
          		JLabel phoneLbl = new JLabel("Phone :");
@@ -52,7 +65,8 @@ public class MessageRow extends JPanel {
       		jpDetails.add(phonePanel);
          }
       add(jpDetails, BorderLayout.NORTH);
-
+      
+      //Show message in message panel
 		JPanel messagePanel = new JPanel(new BorderLayout());
    		JLabel messageLbl = new JLabel("Message :");
    		messageLbl.setFont(rowFont);
