@@ -75,7 +75,7 @@ public class FacultyView{
                });
                jpAdd.add(jbAdd, BorderLayout.WEST);
                
-          //TO DO: add button for faculty inbox
+          //button for faculty inbox
          speakingRequests = speakingRequestManager.getRequestsByFaculty(user.getId());
 			int size = speakingRequests.size();
 			JButton jbFacultyInbox = new JButton("View Messages ("+size+") ");
@@ -122,7 +122,9 @@ public class FacultyView{
       jpPapers.repaint();
    }
    
-   //TO DO: FacultyInbox inner class
+   /**
+    * 
+    */
 	class FacultyInbox extends JFrame {
 		private final int WINDOW_HEIGHT = 300;
 		private final int WINDOW_WIDTH = 500;

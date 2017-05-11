@@ -1,7 +1,9 @@
 import java.util.*;  //for ArrayList
 
 /**
- * 
+ * Provides methods to add speaking requests to the db and retrieve
+ * speaking requests for a particular faculty member.
+ * @author Team 17: Fareed Abolhassani, Abdulaziz Alshkrah, Craig Price, Cynthia Zachar
  */
 public class SpeakingRequestManager{
    private ResearchDb db;
@@ -60,7 +62,7 @@ public class SpeakingRequestManager{
 		}
 
 		return success;
-	}
+	}  //end addRequest w/o phone
    
    /**
     * Adds a speaking request to the db
@@ -110,10 +112,12 @@ public class SpeakingRequestManager{
 		}
 
 		return success;
-	}
+	}  //end addRequest w/ phone
    
    /**
-    * 
+    * Gets the speaking requests that were sent to a particular faculty member
+    * @param facId   the id of the faculty to get messages for
+    * @return an ArrayList of SpeakingRequests for that faculty member
     */
 	public ArrayList<SpeakingRequest> getRequestsByFaculty(int facId) {
 
@@ -146,7 +150,7 @@ public class SpeakingRequestManager{
 		}
 
 		return speakingRequestsList;
-	}
+	}  //end getRequestsByFaculty
    
    /**
     * Fills an ArrayList with a series of Strings
